@@ -11,22 +11,26 @@ dotenv.config();
 
 /**
  * Connect to MongoDB Atlas using the configured connection string.
- * Logs connection success and exits the process on fatal connection errors.
+ * Logs connection success and warns without crashing when the database is unavailable.
  */
 export async function connectDB() {
   const uri = process.env.MONGODB_URI;
 
   if (!uri) {
-    console.error('MONGODB_URI environment variable is required');
-    process.exit(1);
+    console.warn('MONGODB_URI environment variable is not set. Continuing without database connection.');
+    return false;
   }
 
   try {
-    const conn = await mongoose.connect(uri);
+    const conn = await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+    });
 
     console.log(`MongoDB Atlas Connected: ${conn.connection.host}`);
+    return true;
   } catch (error) {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
+    console.error('MongoDB connection error:', error.message || error);
+    return false;
   }
 }

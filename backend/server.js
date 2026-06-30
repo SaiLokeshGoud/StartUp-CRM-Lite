@@ -16,22 +16,11 @@ dotenv.config();
 
 const app = express();
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const PORT = process.env.PORT;
+const PORT = Number(process.env.PORT || 5000);
 
-/**
- * Verify required environment variables are present before startup.
- */
-function checkRequiredEnvVars() {
-  const requiredVars = ['MONGODB_URI', 'JWT_SECRET', 'PORT'];
-  const missingVars = requiredVars.filter((key) => !process.env[key]);
-
-  if (missingVars.length > 0) {
-    console.error('Missing required environment variables:', missingVars.join(', '));
-    process.exit(1);
-  }
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = 'development-secret-change-me';
 }
-
-checkRequiredEnvVars();
 
 const isProduction = NODE_ENV === 'production';
 
@@ -84,7 +73,14 @@ app.use('/api/leads', leadRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date() });
+  const status = app.locals.dbConnected ? 'OK' : 'DEGRADED';
+  const httpStatus = app.locals.dbConnected ? 200 : 503;
+
+  res.status(httpStatus).json({
+    status,
+    database: app.locals.dbConnected ? 'connected' : 'disconnected',
+    timestamp: new Date(),
+  });
 });
 
 // 404 handler for unmatched routes
@@ -99,13 +95,14 @@ let server;
 
 const startServer = async () => {
   try {
-    await connectDB();
+    app.locals.dbConnected = false;
     server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT} in ${NODE_ENV} mode`);
     });
+
+    app.locals.dbConnected = await connectDB();
   } catch (error) {
     console.error('Failed to start server:', error);
-    process.exit(1);
   }
 };
 
