@@ -4,7 +4,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize';
 import mongoose from 'mongoose';
 import { connectDB } from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
@@ -23,6 +22,25 @@ if (!process.env.JWT_SECRET) {
 }
 
 const isProduction = NODE_ENV === 'production';
+
+function sanitizeObject(value) {
+  if (Array.isArray(value)) {
+    return value.map(sanitizeObject);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.entries(value).reduce((acc, [key, nestedValue]) => {
+      if (key === '__proto__' || key.startsWith('$')) {
+        return acc;
+      }
+
+      acc[key] = sanitizeObject(nestedValue);
+      return acc;
+    }, {});
+  }
+
+  return value;
+}
 
 const allowedOrigins = [process.env.FRONTEND_URL, 'https://your-app.vercel.app'];
 
@@ -46,7 +64,12 @@ const authLimiter = rateLimit({
 app.use(helmet());
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false }));
-app.use(mongoSanitize());
+app.use((req, _res, next) => {
+  if (req.body && typeof req.body === 'object') {
+    req.body = sanitizeObject(req.body);
+  }
+  next();
+});
 
 app.use(
   cors({
