@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -12,6 +14,10 @@ import errorHandler from './middleware/errorHandler.js';
 
 // Load environment variables from .env to process.env
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDistPath = path.resolve(__dirname, '../frontend/dist');
 
 const app = express();
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -89,6 +95,14 @@ app.use(morgan(isProduction ? 'combined' : 'dev'));
 // Rate limiting middleware
 app.use('/api/auth', authLimiter);
 app.use('/api', generalLimiter);
+
+if (process.env.NODE_ENV === 'production' || process.env.SERVE_FRONTEND === 'true') {
+  app.use(express.static(frontendDistPath));
+
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
 
 // API route registration
 app.use('/api/auth', authRoutes);
