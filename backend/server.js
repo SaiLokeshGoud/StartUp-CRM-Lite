@@ -50,6 +50,7 @@ function sanitizeObject(value) {
 
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  'https://start-up-crm-lite-wut7.vercel.app',
   'https://start-up-crm-lite.vercel.app',
   'https://your-app.vercel.app',
   'http://localhost:5173',
