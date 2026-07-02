@@ -48,7 +48,12 @@ function sanitizeObject(value) {
   return value;
 }
 
-const allowedOrigins = [process.env.FRONTEND_URL, 'https://your-app.vercel.app'];
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://start-up-crm-lite.vercel.app',
+  'https://your-app.vercel.app',
+  'http://localhost:5173',
+];
 
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
