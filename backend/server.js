@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
@@ -114,12 +115,16 @@ app.use(morgan(isProduction ? 'combined' : 'dev'));
 app.use('/api/auth', authLimiter);
 app.use('/api', generalLimiter);
 
-if (process.env.NODE_ENV === 'production' || process.env.SERVE_FRONTEND === 'true') {
+// Serve frontend only if the built frontend directory exists
+const frontendDistExists = fs.existsSync(path.join(frontendDistPath, 'index.html'));
+if ((process.env.NODE_ENV === 'production' || process.env.SERVE_FRONTEND === 'true') && frontendDistExists) {
   app.use(express.static(frontendDistPath));
 
   app.get(/^\/(?!api).*/, (req, res) => {
     res.sendFile(path.join(frontendDistPath, 'index.html'));
   });
+} else if (process.env.NODE_ENV === 'production' && !frontendDistExists) {
+  console.warn('Frontend dist directory not found at', frontendDistPath, '- skipping frontend serving');
 }
 
 // API route registration
