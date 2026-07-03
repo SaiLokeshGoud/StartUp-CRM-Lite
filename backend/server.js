@@ -48,14 +48,26 @@ function sanitizeObject(value) {
   return value;
 }
 
+
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+   process.env.FRONTEND_URL,
   'https://start-up-crm-lite-wut7.vercel.app',
   'https://start-up-crm-lite.vercel.app',
   'https://your-app.vercel.app',
   'http://localhost:5173',
 ];
 
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+    credentials: true,
+  })
+);
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
