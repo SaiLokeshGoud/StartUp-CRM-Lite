@@ -1,17 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import * as leadService from '../services/leadService';
+import { useAuth } from './AuthContext';
 
 const LeadContext = createContext(null);
 
 export function LeadProvider({ children }) {
+  const { token } = useAuth();
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 20, pages: 0 });
-
-  useEffect(() => {
-    fetchLeads();
-  }, []);
 
   /**
    * Fetch leads from the API using optional query parameters.
@@ -89,6 +87,17 @@ export function LeadProvider({ children }) {
       setIsLoading(false);
     }
   };
+
+  // Only fetch leads if user is authenticated
+  useEffect(() => {
+    if (token) {
+      fetchLeads();
+    } else {
+      // Clear leads if user is not authenticated
+      setLeads([]);
+      setPagination({ total: 0, page: 1, limit: 20, pages: 0 });
+    }
+  }, [token]);
 
   return (
     <LeadContext.Provider value={{ leads, isLoading, pagination, fetchLeads, addLead, updateLead, deleteLead }}>
