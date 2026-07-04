@@ -12,7 +12,8 @@ export const validate = (validations) => async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       success: false,
-      errors: errors.array().map((error) => ({ field: error.param, message: error.msg })),
+      message: 'Validation failed: ' + errors.array().map((error) => error.msg).join(', '),
+      errors: errors.array().map((error) => ({ field: error.path || error.param, message: error.msg })),
     });
   }
 

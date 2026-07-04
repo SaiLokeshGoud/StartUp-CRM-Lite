@@ -51,22 +51,27 @@ function sanitizeObject(value) {
 
 
 const allowedOrigins = [
-   process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL,
   'https://start-up-crm-lite-wut7.vercel.app',
   'https://start-up-crm-lite.vercel.app',
   'https://your-app.vercel.app',
   'http://localhost:5173',
 ];
 
+// Consolidated dynamic CORS configuration to allow whitelisted origins and same-origin requests
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error(`Origin ${origin} not allowed by CORS`));
-    },
-    credentials: true,
+  cors((req, callback) => {
+    const origin = req.header('Origin');
+    const host = req.get('host');
+    const isSameOrigin = origin && (origin === `http://${host}` || origin === `https://${host}`);
+
+    let corsOptions;
+    if (!origin || isSameOrigin || allowedOrigins.includes(origin)) {
+      corsOptions = { origin: true, credentials: true };
+    } else {
+      corsOptions = { origin: false };
+    }
+    callback(null, corsOptions);
   })
 );
 const generalLimiter = rateLimit({
@@ -95,19 +100,6 @@ app.use((req, _res, next) => {
   }
   next();
 });
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-  })
-);
 
 app.use(morgan(isProduction ? 'combined' : 'dev'));
 
