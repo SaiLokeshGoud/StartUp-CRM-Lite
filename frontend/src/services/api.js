@@ -27,11 +27,9 @@ api.interceptors.response.use(
     }
 
     if (error.response.status === 401) {
-      // Only redirect to login if this is NOT an auth request (login/register)
-      // This allows validation errors on auth pages to be handled by the component
       const requestUrl = error.config?.url || '';
       const isAuthEndpoint = requestUrl.includes('/api/auth/login') || requestUrl.includes('/api/auth/register');
-      
+
       if (!isAuthEndpoint) {
         localStorage.removeItem('crm-token');
         window.location.href = '/login';

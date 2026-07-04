@@ -6,10 +6,19 @@ import { useAuth } from './AuthContext';
 const LeadContext = createContext(null);
 
 export function LeadProvider({ children }) {
-  const { token } = useAuth();
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 20, pages: 0 });
+  const { token } = useAuth();
+
+  useEffect(() => {
+    if (token) {
+      fetchLeads();
+    } else {
+      setLeads([]);
+      setPagination({ total: 0, page: 1, limit: 20, pages: 0 });
+    }
+  }, [token]);
 
   /**
    * Fetch leads from the API using optional query parameters.

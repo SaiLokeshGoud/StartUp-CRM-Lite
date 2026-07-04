@@ -5,6 +5,7 @@ import { errorResponse } from '../utils/apiResponse.js';
  * Handles Mongoose, MongoDB, JWT, and generic errors.
  */
 export default function errorHandler(err, req, res, next) {
+  console.error('API Error:', err);
   let statusCode = 500;
   let message = 'Server error';
   let errors = null;
