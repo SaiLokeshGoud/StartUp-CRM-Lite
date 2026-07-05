@@ -73,17 +73,34 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const handleLogout = () => {
-    authService.logout();
-    setUser(null);
-    setToken(null);
-    toast.success('Logged out successfully');
-    navigate('/login');
+  const handleUpdateProfile = async (profileData) => {
+    setIsLoading(true);
+
+    try {
+      const data = await authService.updateProfile(profileData);
+      setUser(data.user);
+      toast.success('Profile updated successfully');
+      return data.user;
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to update profile';
+      toast.error(message);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isLoading, login: handleLogin, register: handleRegister, logout: handleLogout }}
+      value={{
+        user,
+        token,
+        isLoading,
+        login: handleLogin,
+        register: handleRegister,
+        logout: handleLogout,
+        updateProfile: handleUpdateProfile,
+      }}
     >
       {children}
     </AuthContext.Provider>
