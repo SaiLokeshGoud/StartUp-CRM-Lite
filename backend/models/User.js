@@ -73,18 +73,13 @@ const UserSchema = new Schema(
   }
 );
 
-UserSchema.pre('save', async function save(next) {
+UserSchema.pre('save', async function save() {
   if (!this.isModified('password')) {
-    return next();
+    return;
   }
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    return next();
-  } catch (error) {
-    return next(error);
-  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 /**
