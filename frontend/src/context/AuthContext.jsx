@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const { data } = await authService.getProfile();
+        const data = await authService.getProfile();
         setUser(data.user || data);
         setToken(storedToken);
       } catch (error) {
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
 
     try {
-      const { data } = await authService.login(email, password);
+      const data = await authService.login(email, password);
       localStorage.setItem('crm-token', data.token);
       setToken(data.token);
       setUser(data.user);
@@ -58,7 +58,7 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
 
     try {
-      const { data } = await authService.register(name, email, password);
+      const data = await authService.register(name, email, password);
       localStorage.setItem('crm-token', data.token);
       setToken(data.token);
       setUser(data.user);
