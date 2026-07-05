@@ -35,15 +35,12 @@ export default function errorHandler(err, req, res, next) {
 
   const response = {
     success: false,
-    message,
+    message: err.message || message,
+    stack: err.stack,
   };
 
   if (errors) {
     response.errors = errors;
-  }
-
-  if (process.env.NODE_ENV === 'development' && err.stack) {
-    response.stack = err.stack;
   }
 
   return res.status(statusCode).json(response);
