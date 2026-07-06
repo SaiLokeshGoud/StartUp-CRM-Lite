@@ -90,6 +90,14 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const handleLogout = () => {
+    authService.logout();
+    setUser(null);
+    setToken(null);
+    toast.success('Logged out successfully');
+    navigate('/login');
+  };
+
   return (
     <AuthContext.Provider
       value={{

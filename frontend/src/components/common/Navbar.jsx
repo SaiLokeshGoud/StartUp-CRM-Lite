@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BarChart3, LayoutDashboard, Menu, Users, X } from "lucide-react";
+import { BarChart3, LayoutDashboard, Menu, Users, X, User, LogOut } from "lucide-react";
 import DarkModeToggle from "./DarkModeToggle";
+import { useAuth } from "../../context/AuthContext";
 
 const navItems = [
   {
@@ -22,10 +23,17 @@ const navItems = [
     icon: BarChart3,
     subtitle: "Insights",
   },
+  {
+    name: "Profile",
+    path: "/profile",
+    icon: User,
+    subtitle: "Settings",
+  },
 ];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logout } = useAuth();
 
   return (
     <aside className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur transition-colors duration-200 dark:border-gray-700 dark:bg-slate-900/95 md:sticky md:top-0 md:h-screen md:w-64 md:flex-shrink-0 md:border-r md:border-t-0 lg:w-72">
@@ -74,6 +82,16 @@ export default function Navbar() {
                 </NavLink>
               );
             })}
+            <button
+              onClick={() => {
+                setIsMenuOpen(false);
+                logout();
+              }}
+              className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-red-600 transition-all hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
+            >
+              <LogOut size={18} />
+              <span>Sign out</span>
+            </button>
           </nav>
         </div>
       )}
@@ -113,12 +131,19 @@ export default function Navbar() {
           );
         })}
 
-        <div className="mt-auto px-2 py-4">
+        <div className="mt-auto space-y-3 px-2 py-4">
+          <button
+            onClick={logout}
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 transition-all hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
+          >
+            <LogOut size={18} />
+            <span className="text-sm font-semibold">Sign out</span>
+          </button>
           <DarkModeToggle />
         </div>
       </nav>
 
-      <nav className="grid grid-cols-3 gap-2 px-2 py-2 md:hidden">
+      <nav className="grid grid-cols-4 gap-2 px-2 py-2 md:hidden">
         {navItems.map((item) => {
           const Icon = item.icon;
 

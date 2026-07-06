@@ -12,8 +12,6 @@ import { connectDB } from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
-import User from './models/User.js';
-import { Lead } from './models/Lead.js';
 
 // Load environment variables from .env to process.env
 dotenv.config();
@@ -124,44 +122,6 @@ if ((process.env.NODE_ENV === 'production' || process.env.SERVE_FRONTEND === 'tr
 // API route registration
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
-
-// Debug endpoint to list accounts and their lead counts
-app.get('/api/debug-leads', async (req, res, next) => {
-  try {
-    const leadGroups = await Lead.aggregate([
-      {
-        $group: {
-          _id: '$owner',
-          count: { $sum: 1 }
-        }
-      }
-    ]);
-
-    const results = [];
-    for (const group of leadGroups) {
-      if (!group._id) {
-        results.push({
-          email: 'Unassigned',
-          name: 'Unassigned',
-          ownerId: null,
-          count: group.count
-        });
-        continue;
-      }
-      const user = await User.findById(group._id);
-      results.push({
-        email: user ? user.email : 'Unknown',
-        name: user ? user.name : 'Unknown',
-        ownerId: group._id,
-        count: group.count
-      });
-    }
-
-    res.json(results);
-  } catch (error) {
-    next(error);
-  }
-});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
