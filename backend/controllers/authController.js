@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { Lead } from '../models/Lead.js';
+import sampleLeads from '../../frontend/src/data/sampleLeads.js';
 
 /**
  * Generate a signed JWT for the authenticated user.
@@ -26,6 +28,29 @@ export async function register(req, res, next) {
     }
 
     const user = await User.create({ name, email, password });
+
+    // Auto-seed leads for the newly registered user (only if it matches target email)
+    try {
+      const targetEmail = (process.env.SEED_EMAIL || 'kdurgarupesh@gmail.com').toLowerCase().trim();
+      if (user.email.toLowerCase().trim() === targetEmail) {
+        const leadsToInsert = sampleLeads.map((lead) => ({
+          name: lead.name,
+          company: lead.company || 'Unknown',
+          email: lead.email,
+          phone: lead.phone || '',
+          status: lead.status || 'New',
+          source: lead.source || 'Other',
+          value: lead.value || 0,
+          owner: user._id,
+          createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
+        }));
+        await Lead.insertMany(leadsToInsert);
+        console.log(`Auto-seeded 100 sample leads for target registered user: ${user.email}`);
+      }
+    } catch (seedError) {
+      console.error('Error auto-seeding leads on register:', seedError);
+    }
+
     const token = generateToken(user._id);
 
     const userData = user.toObject();
