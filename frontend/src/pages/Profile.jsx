@@ -6,7 +6,7 @@ import { Toaster, toast } from 'react-hot-toast';
 
 export default function Profile() {
   const { user, updateProfile, isLoading } = useAuth();
-  const { leads } = useLeads();
+  const { pagination } = useLeads();
 
   const [name, setName] = useState(user?.name || '');
   const [oldPassword, setOldPassword] = useState('');
@@ -87,7 +87,7 @@ export default function Profile() {
               <div className="flex items-center gap-3 text-sm">
                 <Award size={16} className="text-blue-500" />
                 <span className="text-gray-600 dark:text-gray-300">Leads Owned:</span>
-                <span className="ml-auto font-semibold text-gray-900 dark:text-white">{leads.length}</span>
+                <span className="ml-auto font-semibold text-gray-900 dark:text-white">{pagination.total || 0}</span>
               </div>
             </div>
           </div>
