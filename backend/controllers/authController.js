@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { Lead } from '../models/Lead.js';
-import sampleLeads from '../../frontend/src/data/sampleLeads.js';
+import sampleLeads from '../data/sampleLeads.js';
 
 /**
  * Generate a signed JWT for the authenticated user.
@@ -31,8 +31,12 @@ export async function register(req, res, next) {
 
     // Auto-seed leads for the newly registered user (only if it matches target email)
     try {
-      const targetEmail = (process.env.SEED_EMAIL || 'kdurgarupesh@gmail.com').toLowerCase().trim();
-      if (user.email.toLowerCase().trim() === targetEmail) {
+      const allowedEmails = [
+        (process.env.SEED_EMAIL || 'kdurgarupesh@gmail.com').toLowerCase().trim(),
+        'sailokeshgoudk@gmail.com',
+        'sailokesh@gmail.com'
+      ];
+      if (allowedEmails.includes(user.email.toLowerCase().trim())) {
         const leadsToInsert = sampleLeads.map((lead) => ({
           name: lead.name,
           company: lead.company || 'Unknown',

@@ -14,7 +14,7 @@ import leadRoutes from './routes/leadRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import User from './models/User.js';
 import { Lead } from './models/Lead.js';
-import sampleLeads from '../frontend/src/data/sampleLeads.js';
+import sampleLeads from './data/sampleLeads.js';
 
 // Load environment variables from .env to process.env
 dotenv.config();
@@ -150,26 +150,32 @@ let server;
 
 async function autoSeedLeads() {
   try {
-    const targetEmail = (process.env.SEED_EMAIL || 'kdurgarupesh@gmail.com').toLowerCase().trim();
-    const user = await User.findOne({ email: targetEmail });
-    
-    if (user) {
-      const leadCount = await Lead.countDocuments({ owner: user._id });
-      if (leadCount === 0) {
-        console.log(`Auto-seeding 100 sample leads for target user: ${user.email}...`);
-        const leadsToInsert = sampleLeads.map((lead) => ({
-          name: lead.name,
-          company: lead.company || 'Unknown',
-          email: lead.email,
-          phone: lead.phone || '',
-          status: lead.status || 'New',
-          source: lead.source || 'Other',
-          value: lead.value || 0,
-          owner: user._id,
-          createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
-        }));
-        await Lead.insertMany(leadsToInsert);
-        console.log(`Successfully auto-seeded 100 leads for target user ${user.email}`);
+    const allowedEmails = [
+      (process.env.SEED_EMAIL || 'kdurgarupesh@gmail.com').toLowerCase().trim(),
+      'sailokeshgoudk@gmail.com',
+      'sailokesh@gmail.com'
+    ];
+
+    for (const email of allowedEmails) {
+      const user = await User.findOne({ email });
+      if (user) {
+        const leadCount = await Lead.countDocuments({ owner: user._id });
+        if (leadCount === 0) {
+          console.log(`Auto-seeding 100 sample leads for target user: ${user.email}...`);
+          const leadsToInsert = sampleLeads.map((lead) => ({
+            name: lead.name,
+            company: lead.company || 'Unknown',
+            email: lead.email,
+            phone: lead.phone || '',
+            status: lead.status || 'New',
+            source: lead.source || 'Other',
+            value: lead.value || 0,
+            owner: user._id,
+            createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
+          }));
+          await Lead.insertMany(leadsToInsert);
+          console.log(`Successfully auto-seeded 100 leads for target user ${user.email}`);
+        }
       }
     }
   } catch (err) {
