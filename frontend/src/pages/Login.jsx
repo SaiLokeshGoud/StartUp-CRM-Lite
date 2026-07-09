@@ -30,20 +30,15 @@ export default function Login() {
         
         {/* Brand Header */}
         <div className="relative z-10">
-          <div className="flex items-center gap-3">
-            <svg className="h-8 w-8" viewBox="0 0 24 24" fill="url(#login-bolt-grad-1)">
-              <defs>
-                <linearGradient id="login-bolt-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#a855f7" />
-                  <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-              </defs>
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-            <h2 className="text-2xl font-extrabold tracking-tight text-white">
-              StartUp-CRM-Lite
-            </h2>
+          <div className="flex items-center gap-2">
+            <Activity className="h-6 w-6 text-blue-300" />
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+              Startup CRM
+            </p>
           </div>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight">
+            Operations Hub
+          </h2>
         </div>
 
         {/* Feature highlights */}
@@ -89,19 +84,13 @@ export default function Login() {
       <div className="relative flex flex-1 flex-col justify-between p-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
         {/* Floating header & Dark Mode Toggle */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 md:hidden">
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="url(#login-bolt-grad-2)">
-              <defs>
-                <linearGradient id="login-bolt-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#a855f7" />
-                  <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-              </defs>
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-            <span className="text-md font-bold tracking-tight text-gray-900 dark:text-white">
-              StartUp-CRM-Lite
-            </span>
+          <div className="md:hidden">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
+              Startup CRM
+            </p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">
+              Operations Hub
+            </p>
           </div>
           <div className="hidden md:block" />
           <DarkModeToggle />

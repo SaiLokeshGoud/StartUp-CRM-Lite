@@ -38,19 +38,13 @@ export default function Navbar() {
   return (
     <aside className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur transition-colors duration-200 dark:border-gray-700 dark:bg-slate-900/95 md:sticky md:top-0 md:h-screen md:w-64 md:flex-shrink-0 md:border-r md:border-t-0 lg:w-72">
       <div className="flex items-center justify-between px-4 py-3 md:hidden">
-        <div className="flex items-center gap-2">
-          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="url(#nav-bolt-grad-1)">
-            <defs>
-              <linearGradient id="nav-bolt-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#a855f7" />
-                <stop offset="100%" stopColor="#3b82f6" />
-              </linearGradient>
-            </defs>
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-          </svg>
-          <span className="text-md font-bold tracking-tight text-gray-900 dark:text-white">
-            StartUp-CRM-Lite
-          </span>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
+            Startup CRM
+          </p>
+          <p className="text-sm font-semibold text-gray-900 dark:text-white">
+            Lite
+          </p>
         </div>
 
         <button
@@ -103,21 +97,13 @@ export default function Navbar() {
       )}
 
       <nav className="hidden md:flex md:flex-1 md:flex-col md:gap-2 md:px-4 md:py-6">
-        <div className="mb-6 hidden px-2 lg:block">
-          <div className="flex items-center gap-2">
-            <svg className="h-7 w-7" viewBox="0 0 24 24" fill="url(#nav-bolt-grad-2)">
-              <defs>
-                <linearGradient id="nav-bolt-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#a855f7" />
-                  <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-              </defs>
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-            <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-              StartUp-CRM-Lite
-            </span>
-          </div>
+        <div className="mb-4 hidden px-2 lg:block">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
+            Startup CRM
+          </p>
+          <h2 className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
+            Operations Hub
+          </h2>
         </div>
 
         {navItems.map((item) => {
