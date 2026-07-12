@@ -33,7 +33,7 @@ const navItems = [
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <aside className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur transition-colors duration-200 dark:border-gray-700 dark:bg-slate-900/95 md:sticky md:top-0 md:h-screen md:flex md:flex-col md:w-64 md:flex-shrink-0 md:border-r md:border-t-0 lg:w-72">
@@ -83,7 +83,7 @@ export default function Navbar() {
                   }
                 >
                   <Icon size={18} />
-                  <span>{item.name}</span>
+                  <span>{item.path === "/profile" ? (user?.name || item.name) : item.name}</span>
                 </NavLink>
               );
             })}
@@ -156,7 +156,7 @@ export default function Navbar() {
           >
             <User size={18} />
             <span className="flex flex-col text-left leading-tight">
-              <span className="text-sm font-semibold">Profile</span>
+              <span className="text-sm font-semibold">{user?.name || "Profile"}</span>
               <span className="hidden text-[11px] text-inherit/70 lg:block">Settings</span>
             </span>
           </NavLink>
