@@ -36,7 +36,7 @@ export default function Navbar() {
   const { logout } = useAuth();
 
   return (
-    <aside className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur transition-colors duration-200 dark:border-gray-700 dark:bg-slate-900/95 md:sticky md:top-0 md:h-screen md:w-64 md:flex-shrink-0 md:border-r md:border-t-0 lg:w-72">
+    <aside className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur transition-colors duration-200 dark:border-gray-700 dark:bg-slate-900/95 md:sticky md:top-0 md:h-screen md:flex md:flex-col md:w-64 md:flex-shrink-0 md:border-r md:border-t-0 lg:w-72">
       <div className="flex items-center justify-between px-4 py-3 md:hidden">
         <div className="flex items-center gap-2.5">
           <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 p-1.5 text-blue-600 dark:text-blue-400">
