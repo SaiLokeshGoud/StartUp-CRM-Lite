@@ -22,160 +22,137 @@ export default function Login() {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      {/* Premium background mesh glows for Light Mode */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#e0f2fe_0%,transparent_45%)] bg-[radial-gradient(circle_at_80%_80%,#e0e7ff_0%,transparent_45%)] bg-[radial-gradient(circle_at_50%_50%,#f0fdf4_0%,transparent_50%)] opacity-80 dark:hidden" />
-      
-      {/* Premium background mesh glows for Dark Mode */}
-      <div className="absolute inset-0 hidden bg-[radial-gradient(circle_at_20%_20%,rgba(29,78,216,0.12)_0%,transparent_45%)] bg-[radial-gradient(circle_at_80%_80%,rgba(79,70,229,0.12)_0%,transparent_45%)] bg-[radial-gradient(circle_at_50%_50%,rgba(15,23,42,0.85)_0%,transparent_50%)] dark:block" />
+    <div className="flex min-h-screen w-full transition-colors duration-200">
+      {/* Left panel: Info & Branding */}
+      <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-blue-600 via-indigo-700 to-slate-900 p-12 text-white md:flex">
+        {/* Glowing overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.1),transparent_50%)]" />
+        
+        {/* Brand Header */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-2">
+            <Activity className="h-6 w-6 text-blue-300" />
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
+              Startup CRM
+            </p>
+          </div>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight">
+            Operations Hub
+          </h2>
+        </div>
 
-      {/* Global dot grid pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1.5px,transparent_1.5px)] [background-size:24px_24px] dark:bg-[radial-gradient(#1e293b_1.5px,transparent_1.5px)] opacity-60" />
-
-      {/* Content wrapper */}
-      <div className="relative z-10 flex w-full flex-col md:flex-row">
-        {/* Left panel: Info & Branding with full light/dark support */}
-        <div className="relative hidden w-1/2 flex-col justify-between border-r border-slate-200/50 bg-white/20 dark:bg-slate-950/10 p-12 transition-colors duration-200 dark:border-slate-800/80 md:flex">
-          {/* Brand Header */}
-          <div>
-            <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-blue-50 dark:bg-blue-950/40 p-2 text-blue-600 dark:text-blue-400">
-                <Activity className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-blue-600 dark:text-blue-400 leading-none">
-                  Startup CRM
-                </p>
-                <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                  Operations Hub
-                </h2>
-              </div>
+        {/* Feature highlights */}
+        <div className="relative z-10 space-y-8 py-12">
+          <div className="flex items-start gap-4">
+            <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
+              <LayoutDashboard size={20} className="text-blue-300" />
+            </div>
+            <div>
+              <h4 className="text-md font-bold text-white">Interactive Dashboard</h4>
+              <p className="mt-1 text-sm text-blue-100/80">Get a real-time overview of your pipeline performance and metrics.</p>
             </div>
           </div>
 
-          {/* Feature Highlights with glassmorphic cards */}
-          <div className="space-y-6 py-6">
-            <div className="flex items-start gap-4 rounded-2xl border border-slate-200/40 dark:border-slate-800/40 bg-white/60 dark:bg-slate-900/20 p-4 shadow-sm backdrop-blur-sm transition-colors duration-200">
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-2.5 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-100 dark:border-slate-800">
-                <LayoutDashboard size={20} />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Interactive Dashboard</h4>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Get a real-time overview of your pipeline performance and key metrics at a glance.</p>
-              </div>
+          <div className="flex items-start gap-4">
+            <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
+              <Users size={20} className="text-blue-300" />
             </div>
-
-            <div className="flex items-start gap-4 rounded-2xl border border-slate-200/40 dark:border-slate-800/40 bg-white/60 dark:bg-slate-900/20 p-4 shadow-sm backdrop-blur-sm transition-colors duration-200">
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-2.5 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-100 dark:border-slate-800">
-                <Users size={20} />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Lead Operations</h4>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Seamlessly organize, filter, and track over 100 sample leads linked to your account.</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 rounded-2xl border border-slate-200/40 dark:border-slate-800/40 bg-white/60 dark:bg-slate-900/20 p-4 shadow-sm backdrop-blur-sm transition-colors duration-200">
-              <div className="rounded-xl bg-white dark:bg-slate-900 p-2.5 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-100 dark:border-slate-800">
-                <BarChart3 size={20} />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">Advanced Insights</h4>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Generate dynamic funnel and source analytics to optimize your entire sales velocity.</p>
-              </div>
+            <div>
+              <h4 className="text-md font-bold text-white">Lead Operations</h4>
+              <p className="mt-1 text-sm text-blue-100/80">Seamlessly organize, filter, and track over 100 sample leads.</p>
             </div>
           </div>
 
-          {/* Footer Sentence */}
-          <div className="border-t border-slate-200 dark:border-slate-800/80 pt-4">
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-              A high-performance lead management and sales operations dashboard designed for fast-growing startups.
+          <div className="flex items-start gap-4">
+            <div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
+              <BarChart3 size={20} className="text-blue-300" />
+            </div>
+            <div>
+              <h4 className="text-md font-bold text-white">Advanced Insights</h4>
+              <p className="mt-1 text-sm text-blue-100/80">Generate dynamic funnel and source analytics to optimize sales velocity.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Description sentence */}
+        <p className="relative z-10 text-xs text-blue-200/60">
+          A high-performance lead management and sales operations dashboard designed for fast-growing startups.
+        </p>
+      </div>
+
+      {/* Right panel: Sign-in Form */}
+      <div className="relative flex flex-1 flex-col justify-between p-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+        {/* Floating header & Dark Mode Toggle */}
+        <div className="flex items-center justify-between">
+          <div className="md:hidden">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
+              Startup CRM
+            </p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">
+              Operations Hub
+            </p>
+          </div>
+          <div className="hidden md:block" />
+          <DarkModeToggle />
+        </div>
+
+        {/* Centered Login Card */}
+        <div className="mx-auto my-auto w-full max-w-md">
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900 transition-colors duration-200">
+            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Sign in</h1>
+            <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">Enter your credentials to access your CRM dashboard.</p>
+
+            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">Email address</label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="password" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">Password</label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white"
+                    required
+                  />
+                </div>
+              </div>
+
+              {error && <p className="text-sm text-red-600 dark:text-red-400 font-medium">{error}</p>}
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800"
+              >
+                {isLoading ? 'Signing in...' : 'Sign in'}
+              </button>
+            </form>
+
+            <p className="mt-6 text-center text-sm text-slate-500 dark:text-gray-400">
+              New to Startup CRM Lite?{' '}
+              <Link to="/register" className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400">
+                Create an account
+              </Link>
             </p>
           </div>
         </div>
 
-        {/* Right panel: Sign-in Form */}
-        <div className="relative flex flex-1 flex-col justify-between p-8 bg-white/10 dark:bg-slate-950/10 transition-colors duration-200">
-          {/* Floating header & Dark Mode Toggle */}
-          <div className="flex items-center justify-between">
-            {/* Mobile Header Branding */}
-            <div className="flex items-center gap-2 md:hidden">
-              <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 p-1.5 text-blue-600 dark:text-blue-400">
-                <Activity className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 leading-none">
-                  Startup CRM
-                </p>
-                <p className="text-xs font-bold text-gray-900 dark:text-white">
-                  Operations Hub
-                </p>
-              </div>
-            </div>
-            <div className="hidden md:block" />
-            <DarkModeToggle />
-          </div>
-
-          {/* Centered Login Card */}
-          <div className="mx-auto my-auto w-full max-w-md">
-            <div className="rounded-3xl border border-slate-200/80 bg-white/90 p-8 shadow-xl shadow-slate-100/50 dark:border-slate-800/80 dark:bg-slate-900/90 dark:shadow-none backdrop-blur-md transition-colors duration-200">
-              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Sign in</h1>
-              <p className="mt-2 text-sm text-slate-500 dark:text-gray-400 leading-relaxed">Enter your credentials to access your CRM dashboard.</p>
-
-              <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">Email address</label>
-                    <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-950/40"
-                      placeholder="name@company.com"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">Password</label>
-                    <input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-950/40"
-                      placeholder="••••••••"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {error && <p className="text-sm text-red-600 dark:text-red-400 font-semibold">{error}</p>}
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800 shadow-sm"
-                >
-                  {isLoading ? 'Signing in...' : 'Sign in'}
-                </button>
-              </form>
-
-              <p className="mt-6 text-center text-sm text-slate-500 dark:text-gray-400">
-                New to Startup CRM?{' '}
-                <Link to="/register" className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400">
-                  Create an account
-                </Link>
-              </p>
-            </div>
-          </div>
-
-          {/* Footer info for mobile */}
-          <p className="mt-8 text-center text-xs text-gray-400 dark:text-gray-600 md:hidden">
-            © 2026 Startup CRM Lite. All rights reserved.
-          </p>
-        </div>
+        {/* Footer info for mobile */}
+        <p className="mt-8 text-center text-xs text-gray-400 dark:text-gray-600 md:hidden">
+          © 2026 Startup CRM Lite.
+        </p>
       </div>
     </div>
   );
