@@ -116,32 +116,51 @@ export default function Navbar() {
           </div>
         </div>
 
-        {navItems.map((item) => {
-          const Icon = item.icon;
+        {navItems
+          .filter((item) => item.path !== "/profile")
+          .map((item) => {
+            const Icon = item.icon;
 
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.path === "/"}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
-                  isActive
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                }`
-              }
-            >
-              <Icon size={18} />
-              <span className="flex flex-col text-left leading-tight">
-                <span className="text-sm font-semibold">{item.name}</span>
-                <span className="hidden text-[11px] text-inherit/70 lg:block">{item.subtitle}</span>
-              </span>
-            </NavLink>
-          );
-        })}
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === "/"}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
+                    isActive
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                  }`
+                }
+              >
+                <Icon size={18} />
+                <span className="flex flex-col text-left leading-tight">
+                  <span className="text-sm font-semibold">{item.name}</span>
+                  <span className="hidden text-[11px] text-inherit/70 lg:block">{item.subtitle}</span>
+                </span>
+              </NavLink>
+            );
+          })}
 
         <div className="mt-auto space-y-3 px-2 py-4">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+              }`
+            }
+          >
+            <User size={18} />
+            <span className="flex flex-col text-left leading-tight">
+              <span className="text-sm font-semibold">Profile</span>
+              <span className="hidden text-[11px] text-inherit/70 lg:block">Settings</span>
+            </span>
+          </NavLink>
+          <DarkModeToggle />
           <button
             onClick={logout}
             className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 transition-all hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
@@ -149,7 +168,6 @@ export default function Navbar() {
             <LogOut size={18} />
             <span className="text-sm font-semibold">Sign out</span>
           </button>
-          <DarkModeToggle />
         </div>
       </nav>
 
