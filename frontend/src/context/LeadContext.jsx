@@ -8,7 +8,7 @@ const LeadContext = createContext(null);
 export function LeadProvider({ children }) {
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 20, pages: 0 });
+  const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 1000, pages: 0 });
   const { token } = useAuth();
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function LeadProvider({ children }) {
       fetchLeads();
     } else {
       setLeads([]);
-      setPagination({ total: 0, page: 1, limit: 20, pages: 0 });
+      setPagination({ total: 0, page: 1, limit: 1000, pages: 0 });
     }
   }, [token]);
 
@@ -27,9 +27,10 @@ export function LeadProvider({ children }) {
     setIsLoading(true);
 
     try {
-      const { data, pagination: pageData } = await leadService.getLeads(params);
+      const queryParams = { limit: 1000, ...params };
+      const { data, pagination: pageData } = await leadService.getLeads(queryParams);
       setLeads(data);
-      setPagination(pageData || { total: 0, page: 1, limit: 20, pages: 0 });
+      setPagination(pageData || { total: 0, page: 1, limit: 1000, pages: 0 });
     } catch (error) {
       const message = error.response?.data?.message || 'Failed to fetch leads';
       toast.error(message);
@@ -97,16 +98,6 @@ export function LeadProvider({ children }) {
     }
   };
 
-  // Only fetch leads if user is authenticated
-  useEffect(() => {
-    if (token) {
-      fetchLeads();
-    } else {
-      // Clear leads if user is not authenticated
-      setLeads([]);
-      setPagination({ total: 0, page: 1, limit: 20, pages: 0 });
-    }
-  }, [token]);
 
   return (
     <LeadContext.Provider value={{ leads, isLoading, pagination, fetchLeads, addLead, updateLead, deleteLead }}>
