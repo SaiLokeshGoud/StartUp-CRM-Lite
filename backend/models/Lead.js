@@ -89,6 +89,16 @@ const LeadSchema = new Schema(
     },
 
     /**
+     * Estimated monetary value of the lead.
+     * @type {Number}
+     */
+    value: {
+      type: Number,
+      default: 0,
+      min: [0, 'Lead value cannot be negative'],
+    },
+
+    /**
      * Reference to the user who created or owns this lead.
      * @type {mongoose.Types.ObjectId}
      */
