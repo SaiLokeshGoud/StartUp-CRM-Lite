@@ -183,6 +183,35 @@ async function autoSeedLeads() {
   }
 }
 
+async function migrateExistingLeads() {
+  try {
+    const leadsWithoutValue = await Lead.find({ $or: [{ value: { $exists: false } }, { value: 0 }] });
+    if (leadsWithoutValue.length > 0) {
+      console.log(`Migrating ${leadsWithoutValue.length} existing leads to assign default values from sampleLeads...`);
+      
+      const valueMap = new Map();
+      sampleLeads.forEach(lead => {
+        if (lead.email) {
+          valueMap.set(lead.email.toLowerCase().trim(), lead.value);
+        }
+      });
+
+      let updatedCount = 0;
+      for (const lead of leadsWithoutValue) {
+        const sampleValue = valueMap.get(lead.email?.toLowerCase().trim());
+        const targetValue = sampleValue !== undefined ? sampleValue : (Math.floor(Math.random() * 12) + 2) * 10000;
+        
+        lead.value = targetValue;
+        await lead.save();
+        updatedCount++;
+      }
+      console.log(`Successfully migrated ${updatedCount} leads.`);
+    }
+  } catch (err) {
+    console.error('Error migrating existing leads:', err);
+  }
+}
+
 const startServer = async () => {
   try {
     app.locals.dbConnected = false;
@@ -193,6 +222,7 @@ const startServer = async () => {
     app.locals.dbConnected = await connectDB();
     if (app.locals.dbConnected) {
       await autoSeedLeads();
+      await migrateExistingLeads();
     }
   } catch (error) {
     console.error('Failed to start server:', error);
