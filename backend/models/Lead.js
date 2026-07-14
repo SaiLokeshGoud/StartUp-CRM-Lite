@@ -99,6 +99,14 @@ const LeadSchema = new Schema(
     },
 
     /**
+     * Timestamp when the lead status was changed to Won.
+     * @type {Date}
+     */
+    wonAt: {
+      type: Date,
+    },
+
+    /**
      * Reference to the user who created or owns this lead.
      * @type {mongoose.Types.ObjectId}
      */

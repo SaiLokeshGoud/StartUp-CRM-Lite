@@ -162,17 +162,25 @@ async function autoSeedLeads() {
         const leadCount = await Lead.countDocuments({ owner: user._id });
         if (leadCount === 0) {
           console.log(`Auto-seeding 100 sample leads for target user: ${user.email}...`);
-          const leadsToInsert = sampleLeads.map((lead) => ({
-            name: lead.name,
-            company: lead.company || 'Unknown',
-            email: lead.email,
-            phone: lead.phone || '',
-            status: lead.status || 'New',
-            source: lead.source || 'Other',
-            value: lead.value || 0,
-            owner: user._id,
-            createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
-          }));
+          const leadsToInsert = sampleLeads.map((lead) => {
+            const createdAt = lead.createdAt ? new Date(lead.createdAt) : new Date();
+            let wonAt = undefined;
+            if (lead.status === 'Won') {
+              wonAt = new Date(createdAt.getTime() + (Math.floor(Math.random() * 20) + 5) * 24 * 60 * 60 * 1000);
+            }
+            return {
+              name: lead.name,
+              company: lead.company || 'Unknown',
+              email: lead.email,
+              phone: lead.phone || '',
+              status: lead.status || 'New',
+              source: lead.source || 'Other',
+              value: lead.value || 0,
+              wonAt,
+              owner: user._id,
+              createdAt,
+            };
+          });
           await Lead.insertMany(leadsToInsert);
           console.log(`Successfully auto-seeded 100 leads for target user ${user.email}`);
         }
@@ -185,9 +193,17 @@ async function autoSeedLeads() {
 
 async function migrateExistingLeads() {
   try {
-    const leadsWithoutValue = await Lead.find({ $or: [{ value: { $exists: false } }, { value: 0 }] });
-    if (leadsWithoutValue.length > 0) {
-      console.log(`Migrating ${leadsWithoutValue.length} existing leads to assign default values from sampleLeads...`);
+    const leadsToUpdate = await Lead.find({
+      $or: [
+        { value: { $exists: false } },
+        { value: 0 },
+        { status: 'Won', wonAt: { $exists: false } },
+        { status: 'Won', wonAt: null }
+      ]
+    });
+
+    if (leadsToUpdate.length > 0) {
+      console.log(`Migrating ${leadsToUpdate.length} existing leads to assign default values/wonAt fields...`);
       
       const valueMap = new Map();
       sampleLeads.forEach(lead => {
@@ -197,13 +213,25 @@ async function migrateExistingLeads() {
       });
 
       let updatedCount = 0;
-      for (const lead of leadsWithoutValue) {
-        const sampleValue = valueMap.get(lead.email?.toLowerCase().trim());
-        const targetValue = sampleValue !== undefined ? sampleValue : (Math.floor(Math.random() * 12) + 2) * 10000;
-        
-        lead.value = targetValue;
-        await lead.save();
-        updatedCount++;
+      for (const lead of leadsToUpdate) {
+        let changed = false;
+
+        if (lead.value === undefined || lead.value === 0) {
+          const sampleValue = valueMap.get(lead.email?.toLowerCase().trim());
+          lead.value = sampleValue !== undefined ? sampleValue : (Math.floor(Math.random() * 12) + 2) * 10000;
+          changed = true;
+        }
+
+        if (lead.status === 'Won' && !lead.wonAt) {
+          const createdAt = lead.createdAt || new Date();
+          lead.wonAt = new Date(createdAt.getTime() + (Math.floor(Math.random() * 20) + 5) * 24 * 60 * 60 * 1000);
+          changed = true;
+        }
+
+        if (changed) {
+          await lead.save();
+          updatedCount++;
+        }
       }
       console.log(`Successfully migrated ${updatedCount} leads.`);
     }

@@ -37,17 +37,25 @@ export async function register(req, res, next) {
         'sailokesh@gmail.com'
       ];
       if (allowedEmails.includes(user.email.toLowerCase().trim())) {
-        const leadsToInsert = sampleLeads.map((lead) => ({
-          name: lead.name,
-          company: lead.company || 'Unknown',
-          email: lead.email,
-          phone: lead.phone || '',
-          status: lead.status || 'New',
-          source: lead.source || 'Other',
-          value: lead.value || 0,
-          owner: user._id,
-          createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
-        }));
+        const leadsToInsert = sampleLeads.map((lead) => {
+          const createdAt = lead.createdAt ? new Date(lead.createdAt) : new Date();
+          let wonAt = undefined;
+          if (lead.status === 'Won') {
+            wonAt = new Date(createdAt.getTime() + (Math.floor(Math.random() * 20) + 5) * 24 * 60 * 60 * 1000);
+          }
+          return {
+            name: lead.name,
+            company: lead.company || 'Unknown',
+            email: lead.email,
+            phone: lead.phone || '',
+            status: lead.status || 'New',
+            source: lead.source || 'Other',
+            value: lead.value || 0,
+            wonAt,
+            owner: user._id,
+            createdAt,
+          };
+        });
         await Lead.insertMany(leadsToInsert);
         console.log(`Auto-seeded 100 sample leads for target registered user: ${user.email}`);
       }

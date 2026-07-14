@@ -154,6 +154,12 @@ export async function updateLead(req, res, next) {
     const updatePayload = { ...req.body };
     delete updatePayload.owner;
 
+    if (updatePayload.status === 'Won') {
+      updatePayload.wonAt = new Date();
+    } else if (updatePayload.status && updatePayload.status !== 'Won') {
+      updatePayload.wonAt = null;
+    }
+
     const lead = await Lead.findOneAndUpdate(
       { _id: req.params.id, owner: req.user._id },
       updatePayload,
@@ -176,10 +182,17 @@ export async function updateLead(req, res, next) {
 export async function updateLeadStatus(req, res, next) {
   try {
     const { status } = req.body;
+    const updateData = { status };
+
+    if (status === 'Won') {
+      updateData.wonAt = new Date();
+    } else {
+      updateData.wonAt = null;
+    }
 
     const lead = await Lead.findOneAndUpdate(
       { _id: req.params.id, owner: req.user._id },
-      { status },
+      updateData,
       { new: true, runValidators: true }
     );
 
