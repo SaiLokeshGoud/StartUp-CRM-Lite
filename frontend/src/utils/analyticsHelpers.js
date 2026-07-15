@@ -269,5 +269,5 @@ export const getTopPerformers = (
       (a, b) =>
         b.revenue - a.revenue
     )
-    .slice(0, 3);
+    .slice(0, 5);
 };
