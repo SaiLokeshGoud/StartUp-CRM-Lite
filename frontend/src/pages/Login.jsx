@@ -81,9 +81,13 @@ export default function Login() {
       </div>
 
       {/* Right panel: Sign-in Form */}
-      <div className="relative flex flex-1 flex-col justify-between p-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+      <div className="relative flex flex-1 flex-col justify-between p-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200 overflow-hidden">
+        {/* Decorative background glass orbs */}
+        <div className="absolute top-1/4 -right-24 h-96 w-96 rounded-full bg-blue-400/20 blur-3xl dark:bg-blue-600/10 animate-float-slow pointer-events-none" />
+        <div className="absolute bottom-1/4 -left-24 h-96 w-96 rounded-full bg-purple-400/20 blur-3xl dark:bg-purple-600/10 animate-float-delayed pointer-events-none" />
+
         {/* Floating header & Dark Mode Toggle */}
-        <div className="flex items-center justify-between">
+        <div className="relative z-10 flex items-center justify-between">
           <div className="md:hidden">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-600">
               Startup CRM
@@ -97,33 +101,44 @@ export default function Login() {
         </div>
 
         {/* Centered Login Card */}
-        <div className="mx-auto my-auto w-full max-w-md">
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900 transition-colors duration-200">
-            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white">Sign in</h1>
-            <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">Enter your credentials to access your CRM dashboard.</p>
+        <div className="group relative mx-auto my-auto w-full max-w-md z-10">
+          {/* Card glow effect for dark theme */}
+          <div className="absolute -inset-1.5 rounded-[32px] bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-0 blur-xl transition-all duration-500 group-hover:duration-200 dark:opacity-15 dark:group-hover:opacity-30" />
+          
+          <div className="relative rounded-3xl border border-white/20 dark:border-slate-800/50 bg-white/75 dark:bg-slate-900/75 p-8 shadow-2xl backdrop-blur-xl transition-colors duration-200">
+            {/* Logo and Header inside Card */}
+            <div className="flex flex-col items-center mb-8 animate-fade-in-up">
+              <div className="group/logo relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20 transition-all duration-300 hover:scale-110 hover:shadow-blue-500/40 hover:rotate-3">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-blue-400 to-indigo-500 opacity-0 blur-md transition-opacity duration-300 group-hover/logo:opacity-100" />
+                <Activity className="relative h-7 w-7 text-white animate-pulse" style={{ animationDuration: '3s' }} />
+              </div>
+              
+              <h1 className="mt-4 text-3xl font-extrabold text-slate-900 dark:text-white">Sign in</h1>
+              <p className="mt-2 text-center text-sm text-slate-500 dark:text-gray-400">Enter your credentials to access your CRM dashboard.</p>
+            </div>
 
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="space-y-4">
-                <div>
+                <div className="animate-fade-in-up" style={{ animationDelay: '100ms', opacity: 0 }}>
                   <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">Email address</label>
                   <input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white"
+                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01] focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
                     required
                   />
                 </div>
 
-                <div>
+                <div className="animate-fade-in-up" style={{ animationDelay: '200ms', opacity: 0 }}>
                   <label htmlFor="password" className="block text-sm font-semibold text-slate-700 dark:text-slate-200">Password</label>
                   <input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white"
+                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01] focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
                     required
                   />
                 </div>
@@ -134,15 +149,16 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800"
+                className="animate-fade-in-up inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800"
+                style={{ animationDelay: '300ms', opacity: 0 }}
               >
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-slate-500 dark:text-gray-400">
+            <p className="mt-6 text-center text-sm text-slate-500 dark:text-gray-400 animate-fade-in-up" style={{ animationDelay: '400ms', opacity: 0 }}>
               New to Startup CRM Lite?{' '}
-              <Link to="/register" className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400">
+              <Link to="/register" className="font-semibold text-blue-600 dark:text-blue-400 animated-underline">
                 Create an account
               </Link>
             </p>
