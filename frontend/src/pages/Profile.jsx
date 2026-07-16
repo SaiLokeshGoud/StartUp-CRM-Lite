@@ -61,10 +61,19 @@ export default function Profile() {
         {/* User Card */}
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-md transition-colors duration-200 dark:border-slate-800 dark:bg-slate-900/50">
           <div className="flex flex-col items-center text-center">
-            {/* Avatar with Circular Gradient */}
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-400 text-3xl font-extrabold text-white shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/50">
-              {firstLetter}
-            </div>
+            {/* Avatar with Circular Gradient or Google Profile Picture */}
+            {user?.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt={user.name}
+                className="h-24 w-24 rounded-full object-cover shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/50"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-400 text-3xl font-extrabold text-white shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/50">
+                {firstLetter}
+              </div>
+            )}
             
             <h2 className="mt-4 text-xl font-bold">{user?.name}</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
@@ -82,6 +91,13 @@ export default function Profile() {
                 <span className="text-gray-600 dark:text-gray-300">Role:</span>
                 <span className="ml-auto rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
                   {user?.role || 'user'}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <Key size={16} className="text-blue-500" />
+                <span className="text-gray-600 dark:text-gray-300">Method:</span>
+                <span className="ml-auto rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:bg-slate-800 dark:text-slate-300 capitalize">
+                  {user?.authProvider || 'local'}
                 </span>
               </div>
               <div className="flex items-center gap-3 text-sm">
@@ -113,46 +129,62 @@ export default function Profile() {
                 />
               </div>
 
-              <div className="border-t border-slate-100 pt-4 dark:border-slate-800" />
+              {user?.authProvider === 'google' ? (
+                <>
+                  <div className="border-t border-slate-100 pt-4 dark:border-slate-800" />
+                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200">
+                    <Key size={16} className="text-gray-400" /> Security Settings
+                  </h4>
+                  <div className="rounded-2xl border border-blue-100/50 bg-blue-50/20 p-4 dark:border-blue-900/20 dark:bg-blue-950/10">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Your account is authenticated via Google. Password changes and account security settings are managed directly through your Google Account dashboard.
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="border-t border-slate-100 pt-4 dark:border-slate-800" />
 
-              <h4 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200">
-                <Key size={16} className="text-gray-400" /> Change Password (Optional)
-              </h4>
+                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200">
+                    <Key size={16} className="text-gray-400" /> Change Password (Optional)
+                  </h4>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="md:col-span-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Current Password</label>
-                  <input
-                    type="password"
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    placeholder="Enter current password to make changes"
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="md:col-span-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Current Password</label>
+                      <input
+                        type="password"
+                        value={oldPassword}
+                        onChange={(e) => setOldPassword(e.target.value)}
+                        placeholder="Enter current password to make changes"
+                        className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
+                      />
+                    </div>
 
-                <div>
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">New Password</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="At least 6 characters"
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                  />
-                </div>
+                    <div>
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">New Password</label>
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="At least 6 characters"
+                        className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
+                      />
+                    </div>
 
-                <div>
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Confirm New Password</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Verify new password"
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                  />
-                </div>
-              </div>
+                    <div>
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Confirm New Password</label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Verify new password"
+                        className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex justify-end">
