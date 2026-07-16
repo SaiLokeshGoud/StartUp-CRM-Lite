@@ -93,8 +93,12 @@ const authLimiter = rateLimit({
   message: 'Too many auth attempts. Please try again later.',
 });
 
-// Security middleware
-app.use(helmet());
+// Security middleware - COOP policy configured to allow Google OAuth popup callbacks
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+  })
+);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use((req, _res, next) => {
