@@ -10,6 +10,11 @@ export async function login(email, password) {
   return response.data;
 }
 
+export async function googleLogin(token) {
+  const response = await api.post('/api/auth/google', { token });
+  return response.data;
+}
+
 export function logout() {
   localStorage.removeItem('crm-token');
 }

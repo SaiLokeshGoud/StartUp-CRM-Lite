@@ -36,14 +36,50 @@ const UserSchema = new Schema(
     },
 
     /**
-     * Hashed password for the user account.
+     * Hashed password for the user account. Required only for local auth.
      * @type {String}
      */
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: [
+        function() {
+          return this.authProvider === 'local';
+        },
+        'Password is required'
+      ],
       minlength: [6, 'Password must be at least 6 characters'],
       select: false,
+    },
+
+    /**
+     * Unique identifier from Google.
+     * @type {String}
+     */
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+
+    /**
+     * URL of the user's profile picture from Google.
+     * @type {String}
+     */
+    profilePicture: {
+      type: String,
+    },
+
+    /**
+     * Authentication method used.
+     * @type {String}
+     */
+    authProvider: {
+      type: String,
+      enum: {
+        values: ['local', 'google'],
+        message: 'Auth provider must be either local or google',
+      },
+      default: 'local',
     },
 
     /**
@@ -74,7 +110,7 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre('save', async function save() {
-  if (!this.isModified('password')) {
+  if (!this.password || !this.isModified('password')) {
     return;
   }
 

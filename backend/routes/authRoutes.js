@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { register, login, getProfile, updateProfile } from '../controllers/authController.js';
+import { register, login, googleLogin, getProfile, updateProfile } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 
@@ -52,6 +52,11 @@ router.post('/register', validate(registerValidation), register);
  * User login endpoint.
  */
 router.post('/login', validate(loginValidation), login);
+
+/**
+ * Google Sign-In endpoint.
+ */
+router.post('/google', googleLogin);
 
 /**
  * Get authenticated user profile.

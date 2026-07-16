@@ -28,7 +28,10 @@ api.interceptors.response.use(
 
     if (error.response.status === 401) {
       const requestUrl = error.config?.url || '';
-      const isAuthEndpoint = requestUrl.includes('/api/auth/login') || requestUrl.includes('/api/auth/register');
+      const isAuthEndpoint = 
+        requestUrl.includes('/api/auth/login') || 
+        requestUrl.includes('/api/auth/register') ||
+        requestUrl.includes('/api/auth/google');
 
       if (!isAuthEndpoint) {
         localStorage.removeItem('crm-token');

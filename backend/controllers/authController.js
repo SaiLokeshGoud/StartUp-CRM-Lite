@@ -1,8 +1,12 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 import User from '../models/User.js';
 import { Lead } from '../models/Lead.js';
 import sampleLeads from '../data/sampleLeads.js';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 /**
  * Generate a signed JWT for the authenticated user.
@@ -87,6 +91,11 @@ export async function login(req, res, next) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
+    // Google users don't have a password; redirect them to Google Sign-In
+    if (!user.password) {
+      return res.status(401).json({ success: false, message: 'This account uses Google Sign-In. Please sign in with Google.' });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
@@ -156,3 +165,115 @@ export async function updateProfile(req, res, next) {
     return next(error);
   }
 }
+
+/**
+ * Authenticate user with Google OAuth 2.0.
+ */
+export async function googleLogin(req, res, next) {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: 'Google ID token is required' });
+    }
+
+    // Verify Google ID Token
+    let payload;
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      payload = ticket.getPayload();
+    } catch (verifyError) {
+      console.error('Google ID Token verification failed:', verifyError);
+      return res.status(401).json({ success: false, message: 'Invalid Google ID token' });
+    }
+
+    const { sub: googleId, email, name, picture: profilePicture } = payload;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Google account does not provide an email address' });
+    }
+
+    // Find user by email
+    let user = await User.findOne({ email });
+
+    if (user) {
+      // If user exists, update their Google details if missing
+      let isUpdated = false;
+      if (!user.googleId) {
+        user.googleId = googleId;
+        isUpdated = true;
+      }
+      if (!user.profilePicture && profilePicture) {
+        user.profilePicture = profilePicture;
+        isUpdated = true;
+      }
+      // Link local account to Google provider
+      if (user.authProvider === 'local') {
+        user.authProvider = 'google';
+        isUpdated = true;
+      }
+      if (isUpdated) {
+        await user.save();
+      }
+    } else {
+      // Create a new Google user
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        profilePicture,
+        authProvider: 'google',
+      });
+
+      // Auto-seed leads for the newly registered user (only if it matches target email)
+      try {
+        const allowedEmails = [
+          (process.env.SEED_EMAIL || 'kdurgarupesh@gmail.com').toLowerCase().trim(),
+          'sailokeshgoudk@gmail.com',
+          'sailokesh@gmail.com'
+        ];
+        if (allowedEmails.includes(user.email.toLowerCase().trim())) {
+          const leadsToInsert = sampleLeads.map((lead) => {
+            const createdAt = lead.createdAt ? new Date(lead.createdAt) : new Date();
+            let wonAt = undefined;
+            if (lead.status === 'Won') {
+              wonAt = new Date(createdAt.getTime() + (Math.floor(Math.random() * 20) + 5) * 24 * 60 * 60 * 1000);
+            }
+            return {
+              name: lead.name,
+              company: lead.company || 'Unknown',
+              email: lead.email,
+              phone: lead.phone || '',
+              status: lead.status || 'New',
+              source: lead.source || 'Other',
+              value: lead.value || 0,
+              wonAt,
+              owner: user._id,
+              createdAt,
+            };
+          });
+          await Lead.insertMany(leadsToInsert);
+          console.log(`Auto-seeded 100 sample leads for target registered Google user: ${user.email}`);
+        }
+      } catch (seedError) {
+        console.error('Error auto-seeding leads on Google register:', seedError);
+      }
+    }
+
+    if (!user.isActive) {
+      return res.status(403).json({ success: false, message: 'Account is deactivated' });
+    }
+
+    const sessionToken = generateToken(user._id);
+
+    const userData = user.toObject();
+    delete userData.password;
+
+    return res.status(200).json({ success: true, token: sessionToken, user: userData });
+  } catch (error) {
+    return next(error);
+  }
+}
+

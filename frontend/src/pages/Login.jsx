@@ -3,9 +3,12 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import DarkModeToggle from '../components/common/DarkModeToggle';
 import { Activity, LayoutDashboard, Users, BarChart3 } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Login() {
-  const { login, isLoading } = useAuth();
+  const { login, googleLogin, isLoading } = useAuth();
+  const { isDarkMode } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -156,7 +159,38 @@ export default function Login() {
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-slate-500 dark:text-gray-400 animate-fade-in-up" style={{ animationDelay: '400ms', opacity: 0 }}>
+            {/* Google Sign-in separator and button */}
+            <div className="relative my-6 animate-fade-in-up" style={{ animationDelay: '350ms', opacity: 0 }}>
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-200 dark:border-slate-800/80"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white/70 dark:bg-slate-900/70 px-2 text-slate-500 dark:text-gray-400 backdrop-blur-xl">Or continue with</span>
+              </div>
+            </div>
+
+            <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '400ms', opacity: 0 }}>
+              <GoogleLogin
+                key={isDarkMode ? 'dark' : 'light'}
+                onSuccess={async (credentialResponse) => {
+                  setError('');
+                  try {
+                    await googleLogin(credentialResponse.credential);
+                  } catch (err) {
+                    setError(err.response?.data?.message || 'Google login failed. Please try again.');
+                  }
+                }}
+                onError={() => {
+                  setError('Google Sign-In failed. Please try again.');
+                }}
+                useOneTap
+                theme={isDarkMode ? 'filled_black' : 'outline'}
+                shape="pill"
+                width="382px"
+              />
+            </div>
+
+            <p className="mt-6 text-center text-sm text-slate-500 dark:text-gray-400 animate-fade-in-up" style={{ animationDelay: '450ms', opacity: 0 }}>
               New to Startup CRM Lite?{' '}
               <Link to="/register" className="font-semibold text-blue-600 dark:text-blue-400 animated-underline">
                 Create an account

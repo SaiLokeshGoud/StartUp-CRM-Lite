@@ -54,6 +54,25 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const handleGoogleLogin = async (googleIdToken) => {
+    setIsLoading(true);
+
+    try {
+      const data = await authService.googleLogin(googleIdToken);
+      localStorage.setItem('crm-token', data.token);
+      setToken(data.token);
+      setUser(data.user);
+      toast.success('Logged in with Google successfully');
+      navigate('/');
+    } catch (error) {
+      const message = error.response?.data?.message || 'Google login failed';
+      toast.error(message);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleRegister = async (name, email, password) => {
     setIsLoading(true);
 
@@ -105,6 +124,7 @@ export function AuthProvider({ children }) {
         token,
         isLoading,
         login: handleLogin,
+        googleLogin: handleGoogleLogin,
         register: handleRegister,
         logout: handleLogout,
         updateProfile: handleUpdateProfile,
