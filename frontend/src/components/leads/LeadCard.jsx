@@ -1,10 +1,27 @@
-import { Pencil, Trash2, Eye, Mail, Globe, Users, Linkedin, PhoneCall, MailOpen, HelpCircle, Calendar } from "lucide-react";
+import { Pencil, Trash2, Eye, Mail, Globe, Users, PhoneCall, MailOpen, HelpCircle, Calendar } from "lucide-react";
 import StatusBadge from "./StatusBadge";
+
+const LinkedinIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2059/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
 
 const sourceConfig = {
   Website: { classes: "bg-sky-50 text-sky-700 border-sky-100 dark:bg-sky-950/20 dark:text-sky-350 dark:border-sky-900/30", icon: Globe },
   Referral: { classes: "bg-teal-50 text-teal-700 border-teal-100 dark:bg-teal-950/20 dark:text-teal-350 dark:border-teal-900/30", icon: Users },
-  LinkedIn: { classes: "bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-indigo-950/20 dark:text-indigo-350 dark:border-indigo-900/30", icon: Linkedin },
+  LinkedIn: { classes: "bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-indigo-950/20 dark:text-indigo-350 dark:border-indigo-900/30", icon: LinkedinIcon },
   "Cold Call": { classes: "bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-950/20 dark:text-orange-350 dark:border-orange-900/30", icon: PhoneCall },
   "Email Campaign": { classes: "bg-pink-50 text-pink-700 border-pink-100 dark:bg-pink-950/20 dark:text-pink-350 dark:border-pink-900/30", icon: MailOpen },
   Other: { classes: "bg-slate-50 text-slate-700 border-slate-100 dark:bg-slate-800/40 dark:text-slate-350 dark:border-slate-700/80", icon: HelpCircle },
