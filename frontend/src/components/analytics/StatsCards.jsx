@@ -59,23 +59,29 @@ export default function StatsCards({
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {cards.map((card) => {
         const Icon = card.icon;
 
         return (
-          <div key={card.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
+          <div key={card.title} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <span className="text-sm text-gray-500 dark:text-gray-300">{card.title}</span>
-                <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{card.subtitle}</p>
+                <span className="text-xs text-gray-500 dark:text-gray-300 font-medium truncate block max-w-[100px]" title={card.title}>
+                  {card.title}
+                </span>
+                <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500 truncate" title={card.subtitle}>
+                  {card.subtitle}
+                </p>
               </div>
-              <div className={`rounded-xl p-2 ${card.iconClasses}`}>
-                <Icon size={20} />
+              <div className={`rounded-xl p-1.5 ${card.iconClasses} shrink-0`}>
+                <Icon size={16} />
               </div>
             </div>
 
-            <h2 className="mt-4 text-2xl font-bold sm:text-3xl">{card.value}</h2>
+            <h2 className="mt-3 text-lg font-bold sm:text-xl xl:text-2xl truncate" title={card.value}>
+              {card.value}
+            </h2>
           </div>
         );
       })}
