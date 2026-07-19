@@ -47,73 +47,96 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        name="name"
-        placeholder="Name"
-        value={formData.name}
-        onChange={handleChange}
-        className="w-full min-h-[44px] rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-      />
-      {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+      <div>
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Name</label>
+        <input
+          name="name"
+          placeholder="Enter lead name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full min-h-[44px] rounded-xl border border-[#243145] bg-[#0F172A] px-4 py-3 text-sm text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20"
+        />
+        {errors.name && <p className="mt-1 text-xs text-red-400 font-semibold">{errors.name}</p>}
+      </div>
 
-      <input
-        name="company"
-        placeholder="Company"
-        value={formData.company}
-        onChange={handleChange}
-        className="w-full min-h-[44px] rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-      />
-      {errors.company && <p className="text-sm text-red-500">{errors.company}</p>}
+      <div>
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Company</label>
+        <input
+          name="company"
+          placeholder="Enter company name"
+          value={formData.company}
+          onChange={handleChange}
+          className="w-full min-h-[44px] rounded-xl border border-[#243145] bg-[#0F172A] px-4 py-3 text-sm text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20"
+        />
+        {errors.company && <p className="mt-1 text-xs text-red-400 font-semibold">{errors.company}</p>}
+      </div>
 
-      <input
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-full min-h-[44px] rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-      />
-      {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+      <div>
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Email</label>
+        <input
+          name="email"
+          placeholder="Enter email address"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full min-h-[44px] rounded-xl border border-[#243145] bg-[#0F172A] px-4 py-3 text-sm text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20"
+        />
+        {errors.email && <p className="mt-1 text-xs text-red-400 font-semibold">{errors.email}</p>}
+      </div>
 
-      <input
-        name="phone"
-        placeholder="Phone"
-        value={formData.phone}
-        onChange={handleChange}
-        className="w-full min-h-[44px] rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-      />
+      <div>
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Phone (Optional)</label>
+        <input
+          name="phone"
+          placeholder="Enter phone number"
+          value={formData.phone}
+          onChange={handleChange}
+          className="w-full min-h-[44px] rounded-xl border border-[#243145] bg-[#0F172A] px-4 py-3 text-sm text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20"
+        />
+      </div>
 
-      <select
-        name="status"
-        value={formData.status}
-        onChange={handleChange}
-        className="w-full min-h-[44px] rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-      >
-        {statusOptions.map((status) => (
-          <option key={status}>{status}</option>
-        ))}
-      </select>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Status</label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="w-full min-h-[44px] rounded-xl border border-[#243145] bg-[#0F172A] px-4 py-3 text-sm text-[#F8FAFC] outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 cursor-pointer"
+          >
+            {statusOptions.map((status) => (
+              <option key={status} value={status} className="bg-[#1B2235] text-[#F8FAFC]">{status}</option>
+            ))}
+          </select>
+        </div>
 
-      <select
-        name="source"
-        value={formData.source}
-        onChange={handleChange}
-        className="w-full min-h-[44px] rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-      >
-        {sourceOptions.map((source) => (
-          <option key={source}>{source}</option>
-        ))}
-      </select>
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Source</label>
+          <select
+            name="source"
+            value={formData.source}
+            onChange={handleChange}
+            className="w-full min-h-[44px] rounded-xl border border-[#243145] bg-[#0F172A] px-4 py-3 text-sm text-[#F8FAFC] outline-none transition focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 cursor-pointer"
+          >
+            {sourceOptions.map((source) => (
+              <option key={source} value={source} className="bg-[#1B2235] text-[#F8FAFC]">{source}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-      <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
+      <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end border-t border-[#243145]/40 mt-4">
         <button
           type="button"
           onClick={onCancel}
-          className="min-h-[44px] rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+          className="min-h-[40px] rounded-xl border border-[#243145] bg-[#111827] px-5 py-2 text-xs font-bold text-[#F8FAFC] hover:bg-[#1B2235]/60 transition cursor-pointer"
         >
           Cancel
         </button>
-        <button type="submit" className="min-h-[44px] rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
-          Save
+        <button
+          type="submit"
+          className="min-h-[40px] rounded-xl bg-[#3B82F6] px-5 py-2 text-xs font-bold text-white hover:bg-blue-600 transition active:scale-[0.98] cursor-pointer"
+        >
+          Save Lead
         </button>
       </div>
     </form>
