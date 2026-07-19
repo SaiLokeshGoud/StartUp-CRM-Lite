@@ -19,12 +19,12 @@ const LinkedinIcon = (props) => (
 );
 
 const sourceConfig = {
-  Website: { classes: "bg-sky-50 text-sky-700 border-sky-100 dark:bg-sky-950/20 dark:text-sky-350 dark:border-sky-900/30", icon: Globe },
-  Referral: { classes: "bg-teal-50 text-teal-700 border-teal-100 dark:bg-teal-950/20 dark:text-teal-350 dark:border-teal-900/30", icon: Users },
-  LinkedIn: { classes: "bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-indigo-950/20 dark:text-indigo-350 dark:border-indigo-900/30", icon: LinkedinIcon },
-  "Cold Call": { classes: "bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-950/20 dark:text-orange-350 dark:border-orange-900/30", icon: PhoneCall },
-  "Email Campaign": { classes: "bg-pink-50 text-pink-700 border-pink-100 dark:bg-pink-950/20 dark:text-pink-350 dark:border-pink-900/30", icon: MailOpen },
-  Other: { classes: "bg-slate-50 text-slate-700 border-slate-100 dark:bg-slate-800/40 dark:text-slate-350 dark:border-slate-700/80", icon: HelpCircle },
+  Website: { classes: "bg-sky-500/10 text-sky-400 border-sky-500/20 dark:bg-sky-500/15 dark:text-sky-350 dark:border-sky-500/20", icon: Globe },
+  Referral: { classes: "bg-teal-500/10 text-teal-400 border-teal-500/20 dark:bg-teal-500/15 dark:text-teal-350 dark:border-teal-500/20", icon: Users },
+  LinkedIn: { classes: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20 dark:bg-indigo-500/15 dark:text-indigo-350 dark:border-indigo-500/20", icon: LinkedinIcon },
+  "Cold Call": { classes: "bg-orange-500/10 text-orange-400 border-orange-500/20 dark:bg-orange-500/15 dark:text-orange-350 dark:border-orange-500/20", icon: PhoneCall },
+  "Email Campaign": { classes: "bg-pink-500/10 text-pink-400 border-pink-500/20 dark:bg-pink-500/15 dark:text-pink-350 dark:border-pink-500/20", icon: MailOpen },
+  Other: { classes: "bg-slate-500/10 text-slate-400 border-slate-500/20 dark:bg-slate-800/40 dark:text-slate-350 dark:border-slate-700/80", icon: HelpCircle },
 };
 
 function formatDate(dateString) {
@@ -40,18 +40,19 @@ function formatDate(dateString) {
 
 function SortHeader({ field, label, currentSort, onSort }) {
   const isSortable = !!onSort;
+  const isActive = currentSort.field === field;
   const content = (
     <span className="inline-flex items-center">
       {label}
       {isSortable && (
-        currentSort.field === field ? (
+        isActive ? (
           currentSort.direction === "asc" ? (
-            <ArrowUp size={14} className="ml-1.5 text-blue-600 dark:text-blue-400" />
+            <ArrowUp size={14} className="ml-1.5 text-[#3B82F6]" />
           ) : (
-            <ArrowDown size={14} className="ml-1.5 text-blue-600 dark:text-blue-400" />
+            <ArrowDown size={14} className="ml-1.5 text-[#3B82F6]" />
           )
         ) : (
-          <ArrowUpDown size={14} className="ml-1.5 opacity-30 group-hover:opacity-70 transition" />
+          <ArrowUpDown size={14} className="ml-1.5 opacity-30 group-hover:opacity-75 transition" />
         )
       )}
     </span>
@@ -59,7 +60,7 @@ function SortHeader({ field, label, currentSort, onSort }) {
 
   if (!isSortable) {
     return (
-      <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+      <th className="px-6 py-4 text-left text-[13px] font-semibold uppercase tracking-wider text-[#94A3B8] bg-[#111827] border-b border-[#243145]">
         {label}
       </th>
     );
@@ -68,7 +69,9 @@ function SortHeader({ field, label, currentSort, onSort }) {
   return (
     <th
       onClick={() => onSort(field)}
-      className="group px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-200 transition"
+      className={`group px-6 py-4 text-left text-[13px] font-semibold uppercase tracking-wider cursor-pointer select-none transition bg-[#111827] border-b border-[#243145] ${
+        isActive ? "text-[#3B82F6]" : "text-[#94A3B8] hover:text-[#F8FAFC]"
+      }`}
     >
       {content}
     </th>
@@ -77,24 +80,24 @@ function SortHeader({ field, label, currentSort, onSort }) {
 
 export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { field: "createdAt", direction: "desc" }, onSort }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-800/50 dark:bg-slate-900/50 shadow-sm backdrop-blur-md transition-colors duration-200">
+    <div className="overflow-hidden rounded-2xl border border-[#243145] bg-[#111827] shadow-lg transition-colors duration-200">
       <div className="overflow-x-auto">
         <table className="min-w-[1000px] w-full border-collapse">
           <thead>
-            <tr className="border-b border-slate-200/85 bg-slate-50/70 dark:border-slate-800/60 dark:bg-slate-900/80 sticky top-0 z-10 backdrop-blur-md">
+            <tr className="bg-[#111827] sticky top-0 z-10">
               <SortHeader field="name" label="Name" currentSort={sortBy} onSort={onSort} />
               <SortHeader field="company" label="Company" currentSort={sortBy} onSort={onSort} />
               <SortHeader field="status" label="Status" currentSort={sortBy} onSort={onSort} />
               <SortHeader field="email" label="Email" currentSort={sortBy} />
               <SortHeader field="source" label="Source" currentSort={sortBy} />
               <SortHeader field="createdAt" label="Date Added" currentSort={sortBy} onSort={onSort} />
-              <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 w-[140px]">
+              <th className="px-6 py-4 text-right text-[13px] font-semibold uppercase tracking-wider text-[#94A3B8] w-[140px] bg-[#111827] border-b border-[#243145]">
                 Actions
               </th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/40">
+          <tbody className="divide-y divide-[#243145]/60 bg-[#111827]">
             {leads.map((lead) => {
               const source = sourceConfig[lead.source] || sourceConfig.Other;
               const SourceIcon = source.icon;
@@ -102,74 +105,77 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
               return (
                 <tr
                   key={lead.id || lead._id}
-                  className="group odd:bg-white even:bg-slate-50/20 hover:bg-blue-50/10 dark:odd:bg-slate-950/20 dark:even:bg-slate-900/10 dark:hover:bg-blue-950/5 transition-all duration-200"
-                  style={{ height: "72px" }}
+                  className="group hover:bg-[#1E293B]/40 transition-colors duration-200 bg-[#111827]"
+                  style={{ height: "60px" }}
                 >
                   {/* Name */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                  <td className="px-6 py-3 whitespace-nowrap bg-[#111827] text-[15px] font-medium text-[#F8FAFC]">
+                    <span className="group-hover:text-[#3B82F6] transition-colors">
                       {lead.name}
                     </span>
                   </td>
 
                   {/* Company */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-slate-600 dark:text-slate-300 font-medium">
-                      {lead.company}
-                    </span>
+                  <td className="px-6 py-3 whitespace-nowrap bg-[#111827] text-[15px] text-[#94A3B8] font-medium">
+                    <span>{lead.company}</span>
                   </td>
 
                   {/* Status */}
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-3 whitespace-nowrap bg-[#111827]">
                     <StatusBadge status={lead.status} />
                   </td>
 
                   {/* Email */}
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-3 whitespace-nowrap bg-[#111827]">
                     <a
                       href={`mailto:${lead.email}`}
                       title={`Send email to ${lead.email}`}
-                      className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600 dark:text-gray-450 dark:hover:text-blue-400 transition"
+                      className="inline-flex items-center gap-2 text-[15px] text-[#94A3B8] hover:text-[#3B82F6] transition-colors"
                     >
-                      <Mail size={14} className="opacity-70 group-hover:opacity-100 transition" />
+                      <Mail size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
                       <span className="max-w-[180px] truncate">{lead.email}</span>
                     </a>
                   </td>
 
                   {/* Source */}
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-xs font-semibold capitalize tracking-wide ${source.classes}`}>
+                  <td className="px-6 py-3 whitespace-nowrap bg-[#111827]">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-xs font-semibold capitalize tracking-wide ${source.classes}`}>
                       <SourceIcon size={12} className="opacity-80" />
                       {lead.source}
                     </span>
                   </td>
 
                   {/* Date Added */}
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-gray-450 font-medium">
+                  <td className="px-6 py-3 whitespace-nowrap bg-[#111827] text-[15px] text-[#94A3B8]">
                     {formatDate(lead.createdAt)}
                   </td>
 
                   {/* Actions */}
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="inline-flex items-center justify-end gap-1.5">
+                  <td className="px-6 py-3 whitespace-nowrap text-right bg-[#111827]">
+                    <div className="inline-flex items-center justify-end gap-2.5">
+                      {/* View Button */}
                       <button
                         onClick={() => onView(lead)}
                         title="View details"
-                        className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-slate-800 transition min-h-[38px] min-w-[38px] flex items-center justify-center"
+                        className="h-9 w-9 rounded-full flex items-center justify-center text-[#94A3B8] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-all duration-200 cursor-pointer"
                       >
                         <Eye size={16} />
                       </button>
+
+                      {/* Edit Button */}
                       <button
                         onClick={() => onEdit(lead)}
                         title="Edit lead"
-                        className="p-2 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50/50 dark:text-gray-500 dark:hover:text-blue-400 dark:hover:bg-blue-950/20 transition min-h-[38px] min-w-[38px] flex items-center justify-center"
+                        className="h-9 w-9 rounded-full flex items-center justify-center text-[#94A3B8] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-all duration-200 cursor-pointer"
                       >
                         <Pencil size={16} />
                       </button>
+
+                      {/* Delete Button */}
                       <button
                         onClick={() => onDelete(lead)}
                         title="Delete lead"
-                        className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50/50 dark:text-gray-500 dark:hover:text-red-400 dark:hover:bg-red-950/20 transition min-h-[38px] min-w-[38px] flex items-center justify-center"
+                        className="h-9 w-9 rounded-full flex items-center justify-center text-[#94A3B8] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-all duration-200 cursor-pointer"
                       >
                         <Trash2 size={16} />
                       </button>
