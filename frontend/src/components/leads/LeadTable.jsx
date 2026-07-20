@@ -115,45 +115,47 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                   style={{ height: "60px" }}
                 >
                   {/* Name */}
-                  <td className="px-6 py-3 whitespace-nowrap bg-white dark:bg-[#111827] text-[15px] font-medium text-slate-800 dark:text-[#F8FAFC] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
-                    <span className="group-hover:text-blue-600 dark:group-hover:text-[#3B82F6] transition-colors">
+                  <td className="px-6 py-3 bg-[#111827] text-[15px] font-medium text-[#F8FAFC] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                    <span className="group-hover:text-[#3B82F6] transition-colors block max-w-[160px] truncate" title={lead.name}>
                       {lead.name}
                     </span>
                   </td>
 
                   {/* Company */}
-                  <td className="px-6 py-3 whitespace-nowrap bg-white dark:bg-[#111827] text-[15px] text-slate-550 dark:text-[#94A3B8] font-medium border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
-                    <span>{lead.company}</span>
+                  <td className="px-6 py-3 bg-[#111827] text-[15px] text-slate-550 dark:text-[#94A3B8] font-medium border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                    <span className="block max-w-[140px] truncate" title={lead.company}>
+                      {lead.company}
+                    </span>
                   </td>
 
                   {/* Status */}
-                  <td className="px-6 py-3 whitespace-nowrap bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <StatusBadge status={lead.status} />
                   </td>
 
                   {/* Email */}
-                  <td className="px-6 py-3 whitespace-nowrap bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <a
                       href={`mailto:${lead.email}`}
                       title={`Send email to ${lead.email}`}
-                      className="inline-flex items-center gap-2 text-[15px] text-slate-500 hover:text-blue-600 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] transition-colors"
+                      className="inline-flex items-center gap-2 text-[15px] text-slate-500 hover:text-blue-600 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] transition-colors max-w-[200px]"
                     >
-                      <Mail size={14} className="opacity-70 group-hover:opacity-100 transition-opacity" />
-                      <span className="max-w-[180px] truncate">{lead.email}</span>
+                      <Mail size={14} className="opacity-70 group-hover:opacity-100 transition-opacity shrink-0" />
+                      <span className="truncate">{lead.email}</span>
                     </a>
                   </td>
 
                   {/* Source */}
-                  <td className="px-6 py-3 whitespace-nowrap bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-xs font-semibold capitalize tracking-wide ${source.classes}`}>
-                      <SourceIcon size={12} className="opacity-80" />
+                      <SourceIcon size={12} className="opacity-80 shrink-0" />
                       {lead.source}
                     </span>
                   </td>
 
                   {/* Date Added */}
-                  <td className="px-6 py-3 whitespace-nowrap bg-white dark:bg-[#111827] text-[15px] text-slate-500 dark:text-[#94A3B8] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
-                    {formatDate(lead.createdAt)}
+                  <td className="px-6 py-3 bg-[#111827] text-[15px] text-slate-500 dark:text-[#94A3B8] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                    <span className="block truncate">{formatDate(lead.createdAt)}</span>
                   </td>
 
                   {/* Actions */}

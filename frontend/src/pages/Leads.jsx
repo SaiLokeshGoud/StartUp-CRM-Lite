@@ -292,10 +292,10 @@ export default function Leads() {
 
       {/* Filter Bar with Soft Elevation and Spacing */}
       <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm dark:border-[#243145] dark:bg-[#111827] dark:shadow-xl space-y-4">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-4">
           
-          {/* Search bar */}
-          <div className="relative flex-1 group">
+          {/* Row 1: Search bar */}
+          <div className="relative w-full group">
             <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#94A3B8]/90 group-focus-within:text-[#3B82F6] transition-colors" />
             <input
               type="text"
@@ -316,8 +316,8 @@ export default function Leads() {
             )}
           </div>
 
-          {/* Custom Select Dropdowns and Date Pickers */}
-          <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center">
+          {/* Row 2: Custom Select Dropdowns and Date Pickers */}
+          <div className="flex flex-wrap items-center gap-4">
             
             <CustomSelect
               value={activeFilter}
@@ -341,8 +341,8 @@ export default function Leads() {
             />
 
             {/* Date Range Inputs */}
-            <div className="col-span-2 flex items-center gap-2 h-12">
-              <div className="relative w-full h-full">
+            <div className="flex items-center gap-2 h-12 w-full sm:w-auto">
+              <div className="relative w-full sm:w-[150px] h-full">
                 <input
                   type="date"
                   aria-label="Start date"
@@ -354,7 +354,7 @@ export default function Leads() {
                 <Calendar size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500 pointer-events-none" />
               </div>
               <span className="text-xs text-slate-450 dark:text-[#94A3B8] font-bold">to</span>
-              <div className="relative w-full h-full">
+              <div className="relative w-full sm:w-[150px] h-full">
                 <input
                   type="date"
                   aria-label="End date"
