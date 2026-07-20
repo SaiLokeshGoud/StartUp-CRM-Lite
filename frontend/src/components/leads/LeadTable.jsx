@@ -88,7 +88,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg transition-colors duration-200">
       <div className="overflow-x-auto">
-        <table className="min-w-[1000px] w-full border-collapse">
+        <table className="w-full border-collapse">
           <thead>
             <tr className="bg-slate-50/70 dark:bg-[#111827] sticky top-0 z-10">
               <SortHeader field="name" label="Name" currentSort={sortBy} onSort={onSort} />
@@ -115,26 +115,26 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                   style={{ height: "60px" }}
                 >
                   {/* Name */}
-                  <td className="px-6 py-3 bg-[#111827] text-[15px] font-medium text-[#F8FAFC] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
-                    <span className="group-hover:text-[#3B82F6] transition-colors block max-w-[160px] truncate" title={lead.name}>
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] text-[15px] font-medium text-slate-800 dark:text-[#F8FAFC] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                    <span className="group-hover:text-blue-600 dark:group-hover:text-[#3B82F6] transition-colors block max-w-[160px] truncate" title={lead.name}>
                       {lead.name}
                     </span>
                   </td>
 
                   {/* Company */}
-                  <td className="px-6 py-3 bg-[#111827] text-[15px] text-slate-550 dark:text-[#94A3B8] font-medium border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] text-[15px] text-slate-550 dark:text-[#94A3B8] font-medium border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <span className="block max-w-[140px] truncate" title={lead.company}>
                       {lead.company}
                     </span>
                   </td>
 
                   {/* Status */}
-                  <td className="px-6 py-3 bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <StatusBadge status={lead.status} />
                   </td>
 
                   {/* Email */}
-                  <td className="px-6 py-3 bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <a
                       href={`mailto:${lead.email}`}
                       title={`Send email to ${lead.email}`}
@@ -146,7 +146,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                   </td>
 
                   {/* Source */}
-                  <td className="px-6 py-3 bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-xs font-semibold capitalize tracking-wide ${source.classes}`}>
                       <SourceIcon size={12} className="opacity-80 shrink-0" />
                       {lead.source}
@@ -154,12 +154,12 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                   </td>
 
                   {/* Date Added */}
-                  <td className="px-6 py-3 bg-[#111827] text-[15px] text-slate-500 dark:text-[#94A3B8] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] text-[15px] text-slate-500 dark:text-[#94A3B8] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <span className="block truncate">{formatDate(lead.createdAt)}</span>
                   </td>
 
                   {/* Actions */}
-                  <td className="px-6 py-3 whitespace-nowrap text-right bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
                     <div className="inline-flex items-center justify-end gap-2.5">
                       {/* View Button */}
                       <button
