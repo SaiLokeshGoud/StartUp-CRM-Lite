@@ -338,7 +338,9 @@ export default function Leads() {
               onChange={setSelectedSource}
               options={sourceOptions}
               placeholder="Source"
-                        {/* Date Range Inputs */}
+            />
+
+            {/* Date Range Inputs */}
             <div className="flex items-center gap-2 h-12 w-full sm:w-auto">
               <div className="relative w-full sm:w-[150px] h-full">
                 <input
