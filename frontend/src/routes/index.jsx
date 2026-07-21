@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Layout from '../components/common/Layout';
 import { useAuth } from '../context/AuthContext';
+import AppLoadingSkeleton from '../components/common/AppLoadingSkeleton';
 
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Leads = lazy(() => import('../pages/Leads'));
@@ -22,11 +23,7 @@ function ProtectedRoute() {
   const { token, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading...
-      </div>
-    );
+    return <AppLoadingSkeleton />;
   }
 
   if (!token) {
@@ -38,13 +35,8 @@ function ProtectedRoute() {
 
 export default function AppRoutes() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          Loading...
-        </div>
-      }
-    >
+    <Suspense fallback={<AppLoadingSkeleton />}>
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

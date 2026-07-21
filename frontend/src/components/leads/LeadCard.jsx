@@ -45,7 +45,7 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
   const SourceIcon = source.icon;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:bg-slate-50/40 dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg dark:hover:bg-[#1E293B]/20">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover-card hover-shine card-icon-hover dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg dark:hover:bg-[#1E293B]/20">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-base font-bold text-slate-800 dark:text-[#F8FAFC]">{lead.name}</h3>
@@ -73,7 +73,7 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
 
         <div className="mt-2.5">
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-[10px] font-bold capitalize tracking-wide ${source.classes}`}>
-            <SourceIcon size={10} className="opacity-80" />
+            <SourceIcon size={10} className="opacity-80 card-icon" />
             {lead.source}
           </span>
         </div>
@@ -82,7 +82,7 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
       <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-[#243145]/60 pt-3.5">
         <button
           onClick={() => onView(lead)}
-          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] dark:hover:bg-[#1B2235]/65 transition-all duration-200 active:scale-95 cursor-pointer"
+          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm"
         >
           <Eye size={14} />
           Details
@@ -90,7 +90,7 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
 
         <button
           onClick={() => onEdit(lead)}
-          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] dark:hover:bg-[#1B2235]/65 transition-all duration-200 active:scale-95 cursor-pointer"
+          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm"
         >
           <Pencil size={14} />
           Edit
@@ -98,7 +98,7 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
 
         <button
           onClick={() => onDelete(lead)}
-          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl bg-red-50 text-red-700 border border-red-100 px-3 py-2 text-xs font-bold hover:bg-red-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20 dark:hover:bg-rose-500/20 transition-all duration-200 active:scale-95 cursor-pointer"
+          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl bg-red-50 text-red-700 border border-red-100 px-3 py-2 text-xs font-bold dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20 cursor-pointer btn-animate shadow-sm"
         >
           <Trash2 size={14} />
           Delete

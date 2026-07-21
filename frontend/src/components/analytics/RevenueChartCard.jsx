@@ -11,7 +11,7 @@ export default function RevenueChartCard({
   data,
 }) {
   return (
-    <div className="bg-white dark:bg-gray-800 border rounded-2xl p-6 shadow-sm h-[400px]">
+    <div className="bg-white dark:bg-gray-800 border rounded-2xl p-6 shadow-sm hover-card hover-shine h-[400px]">
       <h3 className="text-xl font-semibold mb-4">
         Revenue Trend
       </h3>

@@ -100,3 +100,213 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   cursor: pointer;
 }
+
+/* Premium Animations Keyframes */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalBackdrop {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes modalContent {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes errorIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Premium Tailwind v4 Utilities */
+@utility animate-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #f1f5f9;
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.6) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+    content: '';
+  }
+}
+.dark .animate-shimmer {
+  background-color: #1e293b;
+  &::after {
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 20%,
+      rgba(255, 255, 255, 0.15) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+}
+
+@utility hover-card {
+  transition: box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: box-shadow, border-color;
+  &:hover {
+    border-color: rgba(59, 130, 246, 0.55);
+    box-shadow: 0 0 20px 2px rgba(59, 130, 246, 0.15);
+  }
+}
+.dark .hover-card:hover {
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 24px 4px rgba(59, 130, 246, 0.25);
+}
+
+@utility hover-shine {
+  transition: none;
+}
+
+@utility card-icon-hover {
+  & .card-icon {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &:hover .card-icon {
+    transform: scale(1.1) rotate(4deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:hover .card-icon {
+      transform: none;
+    }
+  }
+}
+
+@utility btn-animate {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    transform: scale(1.04);
+  }
+  &:active {
+    transform: scale(0.97);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:hover, &:active {
+      transform: none;
+    }
+  }
+}
+
+@utility table-row-hover {
+  position: relative;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  & td:first-child {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background-color: var(--color-blue-500, #3b82f6);
+      transform: scaleY(0);
+      transition: transform 0.2s ease;
+      transform-origin: center;
+    }
+  }
+  &:hover td:first-child::after {
+    transform: scaleY(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    & td:first-child::after {
+      display: none;
+    }
+  }
+}
+
+@utility animate-page-enter {
+  animation: pageEnter 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility animate-modal-backdrop {
+  animation: modalBackdrop 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@utility animate-modal-content {
+  animation: modalContent 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility animate-error-in {
+  animation: errorIn 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@utility nav-item {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  & .nav-icon {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+  }
+  &:hover .nav-icon {
+    transform: scale(1.1) translateX(2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:hover .nav-icon {
+      transform: none;
+    }
+  }
+}

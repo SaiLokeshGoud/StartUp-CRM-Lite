@@ -16,6 +16,7 @@ import FunnelChartCard from "../components/analytics/FunnelChartCard";
 import TopPerformersCard from "../components/analytics/TopPerformersCard";
 import ActivityHeatmap from "../components/analytics/ActivityHeatmap";
 import AnalyticsFilters from "../components/analytics/AnalyticsFilters";
+import FadeIn from "../components/common/FadeIn";
 
 export default function Analytics() {
   const { leads } = useLeads();
@@ -30,53 +31,69 @@ export default function Analytics() {
 
   return (
     <div className="space-y-6 text-gray-900 dark:text-white">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold sm:text-3xl">Analytics Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 sm:text-base">
-              Track sales performance, conversion health, and growth trends.
-            </p>
+      <FadeIn>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine transition-colors dark:border-slate-700 dark:bg-slate-800">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <h1 className="text-2xl font-bold sm:text-3xl">Analytics Dashboard</h1>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 sm:text-base">
+                Track sales performance, conversion health, and growth trends.
+              </p>
+            </div>
+
+            <AnalyticsFilters selected={selectedRange} onChange={setSelectedRange} />
           </div>
-
-          <AnalyticsFilters selected={selectedRange} onChange={setSelectedRange} />
         </div>
-      </div>
+      </FadeIn>
 
-      <StatsCards
-        totalLeads={stats.totalLeads}
-        conversionRate={stats.conversionRate}
-        pipelineValue={stats.pipelineValue}
-        wonRevenue={stats.wonRevenue}
-        averageSalesCycle={stats.averageSalesCycle}
-        lostRate={stats.lostRate}
-      />
+      <FadeIn delay={50}>
+        <StatsCards
+          totalLeads={stats.totalLeads}
+          conversionRate={stats.conversionRate}
+          pipelineValue={stats.pipelineValue}
+          wonRevenue={stats.wonRevenue}
+          averageSalesCycle={stats.averageSalesCycle}
+          lostRate={stats.lostRate}
+        />
+      </FadeIn>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <PieChartCard data={statusData} total={stats.totalLeads} />
-        <BarChartCard data={monthlyLeads} />
-      </div>
+      <FadeIn delay={100}>
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <PieChartCard data={statusData} total={stats.totalLeads} />
+          <BarChartCard data={monthlyLeads} />
+        </div>
+      </FadeIn>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
-        <LineChartCard data={conversionTrend} />
-      </div>
+      <FadeIn delay={150}>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine transition-colors dark:border-slate-700 dark:bg-slate-800">
+          <LineChartCard data={conversionTrend} />
+        </div>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <RevenueChartCard data={revenueData} />
-        <LeadSourceChart data={sourceData} />
-      </div>
+      <FadeIn delay={200}>
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <RevenueChartCard data={revenueData} />
+          <LeadSourceChart data={sourceData} />
+        </div>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <SalesVelocityCard value={salesVelocity} />
-        <ForecastCard forecast={forecastRevenue} />
-      </div>
+      <FadeIn delay={250}>
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <SalesVelocityCard value={salesVelocity} />
+          <ForecastCard forecast={forecastRevenue} />
+        </div>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <FunnelChartCard data={funnelData} />
-        <TopPerformersCard data={performers} />
-      </div>
+      <FadeIn delay={300}>
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <FunnelChartCard data={funnelData} />
+          <TopPerformersCard data={performers} />
+        </div>
+      </FadeIn>
 
-      <ActivityHeatmap leads={leads} />
+      <FadeIn delay={350}>
+        <ActivityHeatmap leads={leads} />
+      </FadeIn>
     </div>
   );
 }

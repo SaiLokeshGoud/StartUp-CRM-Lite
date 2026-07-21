@@ -137,7 +137,7 @@ export default function Register() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01] focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                  className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01]"
                   required
                 />
               </div>
@@ -149,7 +149,7 @@ export default function Register() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01] focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                  className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01]"
                   required
                 />
               </div>
@@ -162,7 +162,7 @@ export default function Register() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01] focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01]"
                     required
                   />
                 </div>
@@ -174,21 +174,29 @@ export default function Register() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01] focus:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+                    className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800 dark:text-white focus:scale-[1.01]"
                     required
                   />
                 </div>
               </div>
 
-              {error && <p className="text-sm text-red-600 dark:text-red-400 font-medium pt-2">{error}</p>}
+              {error && <p className="text-sm text-red-650 dark:text-red-400 font-medium pt-2 animate-error-in">{error}</p>}
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="animate-fade-in-up inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-700 hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800"
+                className="animate-fade-in-up inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white cursor-pointer relative btn-animate hover:shadow-lg hover:shadow-blue-500/20 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800"
                 style={{ animationDelay: '400ms', opacity: 0 }}
               >
-                {isLoading ? 'Creating account...' : 'Create account'}
+                {isLoading && (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  </span>
+                )}
+                <span className={isLoading ? "opacity-0" : ""}>Create account</span>
               </button>
             </form>
 

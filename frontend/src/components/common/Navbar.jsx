@@ -75,14 +75,14 @@ export default function Navbar() {
                   end={item.path === "/"}
                   onClick={() => setIsMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all ${
+                    `flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all nav-item ${
                       isActive
                         ? "bg-blue-600 text-white"
                         : "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
                     }`
                   }
                 >
-                  <Icon size={18} />
+                  <Icon size={18} className="nav-icon" />
                   <span>{item.path === "/profile" ? (user?.name || item.name) : item.name}</span>
                 </NavLink>
               );
@@ -92,9 +92,9 @@ export default function Navbar() {
                 setIsMenuOpen(false);
                 logout();
               }}
-              className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-red-600 transition-all hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
+              className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-red-600 transition-all nav-item hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
             >
-              <LogOut size={18} />
+              <LogOut size={18} className="nav-icon" />
               <span>Sign out</span>
             </button>
           </nav>
@@ -127,14 +127,14 @@ export default function Navbar() {
                 to={item.path}
                 end={item.path === "/"}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
+                  `flex items-center gap-3 rounded-xl px-4 py-3 transition-all nav-item ${
                     isActive
                       ? "bg-blue-600 text-white shadow-sm"
                       : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                   }`
                 }
               >
-                <Icon size={18} />
+                <Icon size={18} className="nav-icon" />
                 <span className="flex flex-col text-left leading-tight">
                   <span className="text-sm font-semibold">{item.name}</span>
                   <span className="hidden text-[11px] text-inherit/70 lg:block">{item.subtitle}</span>
@@ -147,14 +147,14 @@ export default function Navbar() {
           <NavLink
             to="/profile"
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
+              `flex items-center gap-3 rounded-xl px-4 py-3 transition-all nav-item ${
                 isActive
                   ? "bg-blue-600 text-white shadow-sm"
                   : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               }`
             }
           >
-            <User size={18} />
+            <User size={18} className="nav-icon" />
             <span className="flex flex-col text-left leading-tight">
               <span className="text-sm font-semibold">{user?.name || "Profile"}</span>
               <span className="hidden text-[11px] text-inherit/70 lg:block">Settings</span>
@@ -163,9 +163,9 @@ export default function Navbar() {
           <DarkModeToggle />
           <button
             onClick={logout}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 transition-all hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-600 transition-all nav-item hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
           >
-            <LogOut size={18} />
+            <LogOut size={18} className="nav-icon" />
             <span className="text-sm font-semibold">Sign out</span>
           </button>
         </div>
@@ -182,14 +182,14 @@ export default function Navbar() {
               end={item.path === "/"}
               aria-label={item.name}
               className={({ isActive }) =>
-                `flex min-h-[44px] min-w-[44px] flex-col items-center justify-center rounded-xl px-2 py-2 text-[11px] font-medium transition-all ${
+                `flex min-h-[44px] min-w-[44px] flex-col items-center justify-center rounded-xl px-2 py-2 text-[11px] font-medium transition-all nav-item ${
                   isActive
                     ? "bg-blue-600 text-white"
                     : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 }`
               }
             >
-              <Icon size={18} />
+              <Icon size={18} className="nav-icon" />
             </NavLink>
           );
         })}

@@ -11,7 +11,7 @@ export default function BarChartCard({
   data,
 }) {
   return (
-    <div className="bg-white dark:bg-gray-800 border rounded-2xl p-6 shadow-sm h-[400px] text-gray-900 dark:text-white">
+    <div className="bg-white dark:bg-gray-800 border rounded-2xl p-6 shadow-sm hover-card hover-shine h-[400px] text-gray-900 dark:text-white">
       <h3 className="text-xl font-semibold mb-4">
         Monthly Leads
       </h3>

@@ -1,3 +1,5 @@
+import AnimatedCounter from "../common/AnimatedCounter";
+
 /**
  * Reusable dashboard statistic card
  * @param {Object} props
@@ -15,12 +17,14 @@ export default function StatsCard({
   color,
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine card-icon-hover transition-colors dark:border-slate-700 dark:bg-slate-800">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
 
-          <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{value}</h2>
+          <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
+            <AnimatedCounter value={value} />
+          </h2>
 
           <p className="mt-2 text-sm font-medium" style={{ color }}>
             +{change}% from last month
@@ -28,7 +32,7 @@ export default function StatsCard({
         </div>
 
         <div className="rounded-2xl p-3 shadow-sm" style={{ backgroundColor: `${color}14`, color }}>
-          <Icon size={22} />
+          <Icon size={22} className="card-icon" />
         </div>
       </div>
     </div>

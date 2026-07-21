@@ -48,60 +48,60 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5">Name</label>
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Name</label>
         <input
           name="name"
           placeholder="Enter lead name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/20"
+          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
         />
-        {errors.name && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold">{errors.name}</p>}
+        {errors.name && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.name}</p>}
       </div>
 
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5">Company</label>
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Company</label>
         <input
           name="company"
           placeholder="Enter company name"
           value={formData.company}
           onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/20"
+          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
         />
-        {errors.company && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold">{errors.company}</p>}
+        {errors.company && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.company}</p>}
       </div>
 
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5">Email</label>
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Email</label>
         <input
           name="email"
           placeholder="Enter email address"
           value={formData.email}
           onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/20"
+          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
         />
-        {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold">{errors.email}</p>}
+        {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.email}</p>}
       </div>
 
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5">Phone (Optional)</label>
+        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Phone (Optional)</label>
         <input
           name="phone"
           placeholder="Enter phone number"
           value={formData.phone}
           onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/20"
+          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5">Status</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Status</label>
           <select
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/20 cursor-pointer"
+            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10 cursor-pointer"
           >
             {statusOptions.map((status) => (
               <option key={status} value={status} className="bg-white text-slate-800 dark:bg-[#1B2235] dark:text-[#F8FAFC]">{status}</option>
@@ -110,12 +110,12 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
         </div>
 
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5">Source</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Source</label>
           <select
             name="source"
             value={formData.source}
             onChange={handleChange}
-            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/20 cursor-pointer"
+            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10 cursor-pointer"
           >
             {sourceOptions.map((source) => (
               <option key={source} value={source} className="bg-white text-slate-800 dark:bg-[#1B2235] dark:text-[#F8FAFC]">{source}</option>
@@ -128,13 +128,13 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
         <button
           type="button"
           onClick={onCancel}
-          className="min-h-[40px] rounded-xl border border-slate-200 bg-white px-5 py-2 text-xs font-bold text-slate-750 hover:bg-slate-50 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] dark:hover:bg-[#1B2235]/60 transition cursor-pointer"
+          className="min-h-[40px] rounded-xl border border-slate-200 bg-white px-5 py-2 text-xs font-bold text-slate-750 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="min-h-[40px] rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-[#3B82F6] dark:hover:bg-blue-600 px-5 py-2 text-xs font-bold text-white transition active:scale-[0.98] cursor-pointer"
+          className="min-h-[40px] rounded-xl bg-blue-600 dark:bg-[#3B82F6] px-5 py-2 text-xs font-bold text-white cursor-pointer btn-animate shadow-sm"
         >
           Save Lead
         </button>

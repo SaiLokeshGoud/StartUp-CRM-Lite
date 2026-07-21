@@ -1,9 +1,20 @@
+import { useState, useEffect } from "react";
+import AnimatedCounter from "../common/AnimatedCounter";
+
 /**
  * Shows lead status distribution
  * @param {Object} props
  * @param {Array} props.leads
  */
 export default function PipelineOverview({ leads }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Delay slightly to allow page load transitions to complete
+    const timer = setTimeout(() => setMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const counts = {
     New: leads.filter((l) => l.status === "New").length,
     Contacted: leads.filter((l) => l.status === "Contacted").length,
@@ -24,14 +35,21 @@ export default function PipelineOverview({ leads }) {
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Pipeline Overview</h3>
         <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">
-          {total} total leads
+          {total === 1 && leads.length === 0 ? 0 : total} total leads
         </span>
       </div>
 
       <div className="flex h-3 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
         {statuses.map(({ name, color }) => {
           const value = counts[name] || 0;
-          return <div key={name} className={color} style={{ width: `${(value / total) * 100}%` }} />;
+          const targetWidth = `${(value / total) * 100}%`;
+          return (
+            <div
+              key={name}
+              className={`${color} transition-all duration-1000 ease-out`}
+              style={{ width: mounted ? targetWidth : "0%" }}
+            />
+          );
         })}
       </div>
 
@@ -41,12 +59,14 @@ export default function PipelineOverview({ leads }) {
           const percent = total === 0 ? 0 : Math.round((count / total) * 100);
 
           return (
-            <div key={name} className={`rounded-2xl border border-slate-200 p-4 ${bgColor}`}>
+            <div key={name} className={`rounded-2xl border border-slate-200 p-4 hover-card hover-shine ${bgColor}`}>
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{name}</p>
                 <span className={`h-3 w-3 rounded-full ${color}`} />
               </div>
-              <p className={`mt-3 text-2xl font-bold ${textColor}`}>{count}</p>
+              <p className={`mt-3 text-2xl font-bold ${textColor}`}>
+                <AnimatedCounter value={count} />
+              </p>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{percent}% of pipeline</p>
             </div>
           );

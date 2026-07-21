@@ -20,7 +20,7 @@ export default function RecentLeads({ leads }) {
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine dark:border-slate-700 dark:bg-slate-800">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Recent Leads</h3>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">A quick view of your latest opportunities and their current stage.</p>
@@ -39,8 +39,8 @@ export default function RecentLeads({ leads }) {
 
           <tbody>
             {recent.map((lead) => (
-              <tr key={lead.id} className="border-b border-slate-100 dark:border-slate-700/70">
-                <td className="py-3 font-medium text-slate-700 dark:text-slate-200">{lead.name}</td>
+              <tr key={lead.id} className="border-b border-slate-100 dark:border-slate-700/70 table-row-hover hover:bg-slate-50/50 dark:hover:bg-[#1E293B]/20 transition-all duration-200">
+                <td className="py-3 px-2 font-medium text-slate-700 dark:text-slate-200">{lead.name}</td>
                 <td className="py-3 text-slate-600 dark:text-slate-300">{lead.company}</td>
                 <td className="py-3">
                   <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getStatusClasses(lead.status)}`}>

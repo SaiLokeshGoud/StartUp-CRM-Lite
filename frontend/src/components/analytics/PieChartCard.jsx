@@ -13,7 +13,7 @@ import {
 
 export default function PieChartCard({ data, total }) {
   return (
-    <div className="h-[400px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
+    <div className="h-[400px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine transition-colors dark:border-slate-700 dark:bg-slate-800">
       <h3 className="mb-4 text-xl font-semibold text-slate-900 dark:text-white">Lead Status Distribution</h3>
 
       <div className="relative h-[85%]">

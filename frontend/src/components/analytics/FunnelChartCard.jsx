@@ -11,7 +11,7 @@ const FUNNEL_COLORS = ["#2563EB", "#3B82F6", "#F59E0B", "#7C3AED", "#22C55E"];
 
 export default function FunnelChartCard({ data }) {
   return (
-    <div className="h-[450px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
+    <div className="h-[450px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine transition-colors dark:border-slate-700 dark:bg-slate-800">
       <div className="mb-4 flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Sales Funnel</h3>

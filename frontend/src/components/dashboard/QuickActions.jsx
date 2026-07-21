@@ -51,7 +51,7 @@ export default function QuickActions() {
         <button
           type="button"
           onClick={handleAddLead}
-          className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-blue-700"
+          className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white cursor-pointer btn-animate"
         >
           <Plus size={18} />
           Add New Lead
@@ -60,7 +60,7 @@ export default function QuickActions() {
         <button
           type="button"
           onClick={handleViewAllLeads}
-          className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+          className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 cursor-pointer btn-animate"
         >
           <List size={18} />
           View All Leads
@@ -69,7 +69,7 @@ export default function QuickActions() {
         <button
           type="button"
           onClick={handleExportData}
-          className="flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300"
+          className="flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 font-semibold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300 cursor-pointer btn-animate"
         >
           <Download size={18} />
           Export Data

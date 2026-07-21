@@ -1,4 +1,5 @@
 import { useAuth } from "../../context/AuthContext";
+import AnimatedCounter from "../common/AnimatedCounter";
 
 export default function TopPerformersCard({
   data,
@@ -6,7 +7,7 @@ export default function TopPerformersCard({
   const { user } = useAuth();
 
   return (
-    <div className="bg-white dark:bg-gray-800 border rounded-2xl p-6 shadow-sm">
+    <div className="bg-white dark:bg-gray-800 border rounded-2xl p-6 shadow-sm hover-card hover-shine">
       <h3 className="text-xl font-semibold mb-4">
         Top Performers
       </h3>
@@ -36,9 +37,8 @@ export default function TopPerformersCard({
                   }
                 </span>
 
-                <span className="font-semibold">
-                  ₹
-                  {performer.revenue.toLocaleString()}
+                <span className="font-semibold text-slate-800 dark:text-slate-100">
+                  <AnimatedCounter value={`₹${performer.revenue.toLocaleString()}`} />
                 </span>
               </div>
             );

@@ -1,3 +1,4 @@
+import AnimatedCounter from "../common/AnimatedCounter";
 import {
   Users,
   TrendingUp,
@@ -64,7 +65,7 @@ export default function StatsCards({
         const Icon = card.icon;
 
         return (
-          <div key={card.title} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
+          <div key={card.title} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover-card hover-shine card-icon-hover transition-colors dark:border-slate-700 dark:bg-slate-800">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <span className="text-xs text-gray-500 dark:text-gray-300 font-medium truncate block max-w-[100px]" title={card.title}>
@@ -75,12 +76,12 @@ export default function StatsCards({
                 </p>
               </div>
               <div className={`rounded-xl p-1.5 ${card.iconClasses} shrink-0`}>
-                <Icon size={16} />
+                <Icon size={16} className="card-icon" />
               </div>
             </div>
 
             <h2 className="mt-3 text-lg font-bold sm:text-xl xl:text-2xl truncate" title={card.value}>
-              {card.value}
+              <AnimatedCounter value={card.value} />
             </h2>
           </div>
         );

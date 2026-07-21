@@ -25,7 +25,7 @@ export default function ActivityHeatmap({ leads }) {
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover-card hover-shine transition-colors dark:border-slate-700 dark:bg-slate-800">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Activity Heatmap</h3>
@@ -39,7 +39,7 @@ export default function ActivityHeatmap({ leads }) {
       <div className="overflow-x-auto">
         <div className="flex max-w-[1120px] gap-4">
           {months.map((month, monthIndex) => (
-            <div key={month} className="w-[220px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <div key={month} className="w-[220px] flex-shrink-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow-md dark:border-slate-700 dark:bg-slate-900">
               <h4 className="mb-4 text-center text-base font-semibold text-slate-700 dark:text-slate-300">{month}</h4>
 
               <div className="flex">

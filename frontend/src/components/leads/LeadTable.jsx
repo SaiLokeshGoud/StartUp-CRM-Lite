@@ -88,7 +88,7 @@ function SortHeader({ field, label, currentSort, onSort }) {
 
 export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { field: "createdAt", direction: "desc" }, onSort }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg transition-colors duration-200">
+    <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm hover-card hover-shine dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg transition-colors duration-200">
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
@@ -113,7 +113,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
               return (
                 <tr
                   key={lead.id || lead._id}
-                  className="group hover:bg-slate-50/50 dark:hover:bg-[#1E293B]/40 transition-colors duration-200 bg-white dark:bg-[#111827]"
+                  className="group hover:bg-slate-50/50 dark:hover:bg-[#1E293B]/40 transition-colors duration-200 bg-white dark:bg-[#111827] table-row-hover"
                   style={{ height: "60px" }}
                 >
                   {/* Name */}
@@ -167,7 +167,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                       <button
                         onClick={() => onView(lead)}
                         title="View details"
-                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] dark:hover:bg-[#3B82F6]/10 transition-all duration-200 cursor-pointer"
+                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] dark:hover:bg-[#3B82F6]/10 cursor-pointer opacity-0 translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250 ease-out"
                       >
                         <Eye size={16} />
                       </button>
@@ -176,7 +176,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                       <button
                         onClick={() => onEdit(lead)}
                         title="Edit lead"
-                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:text-[#94A3B8] dark:hover:text-[#F59E0B] dark:hover:bg-[#F59E0B]/10 transition-all duration-200 cursor-pointer"
+                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:text-[#94A3B8] dark:hover:text-[#F59E0B] dark:hover:bg-[#F59E0B]/10 cursor-pointer opacity-0 translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250 ease-out delay-75"
                       >
                         <Pencil size={16} />
                       </button>
@@ -185,7 +185,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                       <button
                         onClick={() => onDelete(lead)}
                         title="Delete lead"
-                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 dark:text-[#94A3B8] dark:hover:text-[#EF4444] dark:hover:bg-[#EF4444]/10 transition-all duration-200 cursor-pointer"
+                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 dark:text-[#94A3B8] dark:hover:text-[#EF4444] dark:hover:bg-[#EF4444]/10 cursor-pointer opacity-0 translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250 ease-out delay-150"
                       >
                         <Trash2 size={16} />
                       </button>
