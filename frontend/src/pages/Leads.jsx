@@ -338,29 +338,35 @@ export default function Leads() {
               onChange={setSelectedSource}
               options={sourceOptions}
               placeholder="Source"
-            />
-
-            {/* Date Range Inputs */}
+                        {/* Date Range Inputs */}
             <div className="flex items-center gap-2 h-12 w-full sm:w-auto">
               <div className="relative w-full sm:w-[150px] h-full">
                 <input
-                  type="date"
+                  type={startDate ? "date" : "text"}
                   aria-label="Start date"
+                  placeholder="From Date"
+                  onFocus={(e) => (e.target.type = "date")}
+                  onBlur={(e) => {
+                    if (!e.target.value) e.target.type = "text";
+                  }}
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  placeholder="Select Date"
                   className="w-full h-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:border-[#3B82F6] dark:focus:ring-2 dark:focus:ring-[#3B82F6]/20 cursor-pointer"
                 />
                 <Calendar size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500 pointer-events-none" />
               </div>
-              <span className="text-xs text-slate-450 dark:text-[#94A3B8] font-bold">to</span>
+              <span className="text-xs text-slate-455 dark:text-[#94A3B8] font-bold">to</span>
               <div className="relative w-full sm:w-[150px] h-full">
                 <input
-                  type="date"
+                  type={endDate ? "date" : "text"}
                   aria-label="End date"
+                  placeholder="To Date"
+                  onFocus={(e) => (e.target.type = "date")}
+                  onBlur={(e) => {
+                    if (!e.target.value) e.target.type = "text";
+                  }}
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  placeholder="Select Date"
                   className="w-full h-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:border-[#3B82F6] dark:focus:ring-2 dark:focus:ring-[#3B82F6]/20 cursor-pointer"
                 />
                 <Calendar size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500 pointer-events-none" />
