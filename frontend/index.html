@@ -5,6 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Startup CRM - Operations Hub</title>
+    <style>
+      html, body, #root {
+        background-color: #f8fafc; /* bg-slate-50 fallback */
+      }
+      html.dark, html.dark body, html.dark #root {
+        background-color: #020617; /* dark:bg-slate-950 fallback */
+      }
+    </style>
     <script>
       const theme =
         localStorage.getItem(

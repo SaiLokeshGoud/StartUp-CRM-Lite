@@ -1,8 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLeads } from '../context/LeadContext';
-import { User, Key, Mail, Shield, Award } from 'lucide-react';
+import { User, Key, Mail, Shield, Award, Camera, ShieldCheck, CheckCircle2, Lock, ExternalLink, RefreshCw } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
+import FadeIn from '../components/common/FadeIn';
+
+/**
+ * Client-side helper to crop and compress profile images
+ * @param {File} file
+ * @returns {Promise<string>} base64 compressed data URL
+ */
+const compressImage = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        // Centered square crop
+        const size = Math.min(width, height);
+        const startX = (width - size) / 2;
+        const startY = (height - size) / 2;
+
+        const targetSize = Math.min(size, MAX_WIDTH);
+        canvas.width = targetSize;
+        canvas.height = targetSize;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(
+          img,
+          startX,
+          startY,
+          size,
+          size,
+          0,
+          0,
+          targetSize,
+          targetSize
+        );
+
+        // Compress as image/jpeg at 0.85 quality
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+        resolve(compressedBase64);
+      };
+      img.onerror = () => reject(new Error('Invalid image file'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsDataURL(file);
+  });
+};
 
 export default function Profile() {
   const { user, updateProfile, isLoading } = useAuth();
@@ -12,6 +64,66 @@ export default function Profile() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [localAvatar, setLocalAvatar] = useState(null);
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
+
+  // Sync state if user changes in context
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+    }
+  }, [user]);
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // A. Validate Image Type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      toast.error('Invalid image type. Please choose a JPEG, PNG, or WebP image.');
+      return;
+    }
+
+    // B. Validate original size (Max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image is too large. Please choose an image smaller than 5 MB.');
+      return;
+    }
+
+    try {
+      setIsAvatarUploading(true);
+      
+      // C. Compress and crop image to square 800x800 base64 string
+      const compressedBase64 = await compressImage(file);
+      setLocalAvatar(compressedBase64); // Preview locally immediately
+      
+      // D. Upload payload to backend
+      await updateProfile({ name, profilePicture: compressedBase64 });
+      toast.success('Profile photo updated successfully.');
+    } catch (err) {
+      console.error(err);
+      if (err.response?.status === 413) {
+        toast.error('Image is too large. Please choose a smaller image.');
+      } else {
+        toast.error('Unable to update profile photo. Please try again.');
+      }
+      setLocalAvatar(null); // Reset preview on error
+    } finally {
+      setIsAvatarUploading(false);
+      // Clear value so same file can be selected again
+      e.target.value = '';
+    }
+  };
+
+  const handleCancel = () => {
+    setName(user?.name || '');
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setLocalAvatar(null);
+    toast.success('Changes discarded');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +146,7 @@ export default function Profile() {
       }
 
       await updateProfile(payload);
+      toast.success('Profile updated successfully');
       
       // Clear password fields on success
       setOldPassword('');
@@ -45,167 +158,333 @@ export default function Profile() {
   };
 
   const firstLetter = user?.name ? user.name.charAt(0).toUpperCase() : 'U';
+  
+  const avatarImage = localAvatar || user?.profilePicture;
+  const completionPercent = avatarImage ? 100 : 85;
+
+  const isFormDirty = name !== (user?.name || '') || oldPassword || newPassword || confirmPassword;
+
+  // Design Tokens for Input Fields
+  const inputClass = "w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs sm:text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10";
+  const disabledInputClass = "w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs sm:text-sm text-slate-450 dark:border-[#243145]/60 dark:bg-[#0F172A]/40 dark:text-slate-400/80 outline-none cursor-not-allowed";
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 text-gray-900 dark:text-white">
+    <div className="mx-auto max-w-5xl space-y-6 text-slate-800 dark:text-slate-200">
       <Toaster position="top-right" />
       
-      <div>
-        <h1 className="text-2xl font-bold sm:text-3xl">Profile Settings</h1>
-        <p className="mt-1 text-sm text-gray-500 sm:text-base dark:text-gray-300">
-          Manage your account information and security settings.
-        </p>
-      </div>
+      {/* Page Header */}
+      <FadeIn>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-2xl font-bold sm:text-3xl text-slate-900 dark:text-white">Profile Settings</h1>
+              <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+                Account Settings
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-slate-500 sm:text-base dark:text-slate-400">
+              Manage your account information and security settings.
+            </p>
+          </div>
+        </div>
+      </FadeIn>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* User Card */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-md transition-colors duration-200 dark:border-slate-800 dark:bg-slate-900/50">
-          <div className="flex flex-col items-center text-center">
-            {/* Avatar with Circular Gradient or Google Profile Picture */}
-            {user?.profilePicture ? (
-              <img
-                src={user.profilePicture}
-                alt={user.name}
-                className="h-24 w-24 rounded-full object-cover shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/50"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-400 text-3xl font-extrabold text-white shadow-lg ring-4 ring-blue-100 dark:ring-blue-900/50">
-                {firstLetter}
-              </div>
-            )}
-            
-            <h2 className="mt-4 text-xl font-bold">{user?.name}</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</p>
+        {/* Left Column: Summary Card */}
+        <FadeIn delay={50}>
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <div className="flex flex-col items-center text-center">
+                {/* Avatar with Photo Upload Button Overlay */}
+                <div className="relative group">
+                  {avatarImage ? (
+                    <img
+                      src={avatarImage}
+                      alt={user?.name}
+                      className="h-24 w-24 rounded-full object-cover shadow-md ring-4 ring-slate-100 dark:ring-slate-800/80 transition-all duration-300"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-400 text-3xl font-extrabold text-white shadow-md ring-4 ring-slate-100 dark:ring-slate-800/80">
+                      {firstLetter}
+                    </div>
+                  )}
 
-            <div className="mt-6 w-full border-t border-slate-100 pt-4 dark:border-slate-800" />
+                  {/* Loading spinner overlay */}
+                  {isAvatarUploading && (
+                    <div className="absolute inset-0 flex items-center justify-center rounded-full bg-slate-950/65 ring-4 ring-slate-100 dark:ring-slate-800/80 z-10 transition-all duration-300">
+                      <RefreshCw className="animate-spin h-6 w-6 text-white" />
+                    </div>
+                  )}
+                  
+                  {/* Camera Upload Overlay */}
+                  <label 
+                    htmlFor="avatar-upload"
+                    className={`absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white shadow-md border-2 border-white dark:border-slate-900 transition-all duration-200 ${
+                      isAvatarUploading 
+                        ? 'opacity-40 pointer-events-none cursor-not-allowed' 
+                        : 'hover:bg-blue-700 active:scale-90 cursor-pointer'
+                    }`}
+                    title="Change profile picture"
+                  >
+                    <Camera size={14} />
+                    <input 
+                      type="file" 
+                      id="avatar-upload" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={handleAvatarChange} 
+                      disabled={isAvatarUploading}
+                    />
+                  </label>
+                </div>
+                
+                <h2 className="mt-4 text-lg font-bold text-slate-900 dark:text-white leading-snug truncate max-w-full">
+                  {user?.name || "User Profile"}
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-450 truncate max-w-full">
+                  {user?.email}
+                </p>
 
-            <div className="mt-4 flex w-full flex-col gap-3 text-left">
-              <div className="flex items-center gap-3 text-sm">
-                <Mail size={16} className="text-blue-500" />
-                <span className="text-gray-600 dark:text-gray-300">Email:</span>
-                <span className="ml-auto font-medium text-gray-900 dark:text-white truncate max-w-[150px]">{user?.email}</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Shield size={16} className="text-blue-500" />
-                <span className="text-gray-600 dark:text-gray-300">Role:</span>
-                <span className="ml-auto rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
-                  {user?.role || 'user'}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Key size={16} className="text-blue-500" />
-                <span className="text-gray-600 dark:text-gray-300">Method:</span>
-                <span className="ml-auto rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:bg-slate-800 dark:text-slate-300 capitalize">
-                  {user?.authProvider || 'local'}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <Award size={16} className="text-blue-500" />
-                <span className="text-gray-600 dark:text-gray-300">Leads Owned:</span>
-                <span className="ml-auto font-semibold text-gray-900 dark:text-white">{pagination.total || 0}</span>
+                {/* Account Status Badge */}
+                <div className="mt-3 flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Active Account
+                </div>
+
+                <div className="mt-6 w-full border-t border-slate-200 dark:border-slate-800" />
+
+                {/* Metadata List */}
+                <div className="mt-5 flex w-full flex-col gap-4 text-left">
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Mail size={16} className="text-slate-400 shrink-0" />
+                    <span className="text-slate-500 dark:text-slate-400">Email</span>
+                    <span className="ml-auto font-medium text-slate-900 dark:text-white truncate max-w-[130px] sm:max-w-[160px]" title={user?.email}>
+                      {user?.email}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Shield size={16} className="text-slate-400 shrink-0" />
+                    <span className="text-slate-500 dark:text-slate-400">Role</span>
+                    <span className="ml-auto rounded-full bg-blue-50 dark:bg-blue-950/40 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
+                      {user?.role || 'user'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Key size={16} className="text-slate-400 shrink-0" />
+                    <span className="text-slate-500 dark:text-slate-400">Sign-in Method</span>
+                    <span className="ml-auto rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                      {user?.authProvider || 'local'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Award size={16} className="text-slate-400 shrink-0" />
+                    <span className="text-slate-500 dark:text-slate-400">Leads Owned</span>
+                    <span className="ml-auto font-bold text-slate-900 dark:text-white">
+                      {pagination?.total || 0}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <CheckCircle2 size={16} className="text-slate-400 shrink-0" />
+                    <span className="text-slate-500 dark:text-slate-400">Account Status</span>
+                    <span className="ml-auto rounded-full bg-emerald-50 dark:bg-emerald-950/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                      Active
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-6 w-full border-t border-slate-200 dark:border-slate-800" />
+
+                {/* Profile Completion Indicator */}
+                <div className="mt-5 w-full text-left">
+                  <div className="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
+                    <span>Profile Completion</span>
+                    <span className="text-blue-600 dark:text-blue-400">{completionPercent}%</span>
+                  </div>
+                  <div className="mt-2 w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-blue-600 h-full rounded-full transition-all duration-700 ease-out" 
+                      style={{ width: `${completionPercent}%` }} 
+                    />
+                  </div>
+                  <p className="mt-2.5 text-[10px] text-slate-400 dark:text-slate-500 leading-normal">
+                    Complete your profile to keep your account information up to date.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </FadeIn>
 
-        {/* Update Settings Form */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-md transition-colors duration-200 dark:border-slate-800 dark:bg-slate-900/50 lg:col-span-2">
-          <h3 className="text-lg font-bold">Update Profile Info</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Change your display name or update your account password.</p>
-
-          <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                  <User size={16} className="text-gray-400" /> Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                  required
-                />
+        {/* Right Column: Profile Form / Authentication settings */}
+        <FadeIn delay={100} className="lg:col-span-2">
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <div className="flex items-center gap-2">
+                <User size={18} className="text-blue-500" />
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Update Profile Info</h3>
               </div>
+              <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                Manage your personal account details.
+              </p>
 
-              {user?.authProvider === 'google' ? (
-                <>
-                  <div className="border-t border-slate-100 pt-4 dark:border-slate-800" />
-                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200">
-                    <Key size={16} className="text-gray-400" /> Security Settings
-                  </h4>
-                  <div className="rounded-2xl border border-blue-100/50 bg-blue-50/20 p-4 dark:border-blue-900/20 dark:bg-blue-950/10">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Your account is authenticated via Google. Password changes and account security settings are managed directly through your Google Account dashboard.
+              <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
+                <div className="space-y-4">
+                  {/* Display Name Input */}
+                  <div>
+                    <label className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      Display Name
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className={inputClass}
+                      required
+                    />
+                  </div>
+
+                  {/* Email Input (Read-only) */}
+                  <div>
+                    <label className="text-xs sm:text-sm font-semibold text-slate-450 dark:text-slate-500">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={user?.email || ''}
+                      disabled
+                      className={disabledInputClass}
+                    />
+                    <p className="mt-1.5 text-[11px] text-slate-450 dark:text-slate-500">
+                      Your email address is managed by your {user?.authProvider === 'google' ? 'Google' : 'Account'} login.
                     </p>
                   </div>
-                </>
-              ) : (
-                <>
-                  <div className="border-t border-slate-100 pt-4 dark:border-slate-800" />
 
-                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-800 dark:text-slate-200">
-                    <Key size={16} className="text-gray-400" /> Change Password (Optional)
-                  </h4>
+                  {user?.authProvider === 'google' ? (
+                    /* Google Authenticated Security Details */
+                    <div className="space-y-4">
+                      <div className="border-t border-slate-150 pt-5 dark:border-slate-850" />
+                      
+                      <div className="flex items-center gap-2">
+                        <Lock size={18} className="text-blue-500" />
+                        <h4 className="text-md font-bold text-slate-900 dark:text-white">Security & Authentication</h4>
+                      </div>
 
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div className="md:col-span-2">
-                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Current Password</label>
-                      <input
-                        type="password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        placeholder="Enter current password to make changes"
-                        className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                      />
+                      <div className="grid grid-cols-2 gap-4 rounded-xl border border-slate-200 bg-slate-50/50 p-4 dark:border-slate-800 dark:bg-slate-900/40 text-xs sm:text-sm">
+                        <div>
+                          <p className="font-semibold text-slate-450 dark:text-slate-500">Authentication Provider</p>
+                          <p className="mt-1 font-bold text-slate-800 dark:text-slate-200">Google</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-450 dark:text-slate-500">Account Security</p>
+                          <p className="mt-1 font-bold text-slate-800 dark:text-slate-200">Managed by Google</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3 rounded-xl border border-blue-100 bg-blue-50/20 p-4 text-xs sm:text-sm text-blue-800 dark:border-blue-900/30 dark:bg-blue-950/10 dark:text-blue-300">
+                        <ShieldCheck size={18} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                        <p className="leading-relaxed">
+                          Your account is authenticated through Google. Password changes and account security settings are managed through your Google Account.
+                        </p>
+                      </div>
+
+                      <div className="pt-2">
+                        <a
+                          href="https://myaccount.google.com/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-[38px] items-center gap-2 rounded-xl border border-slate-250 bg-white px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 cursor-pointer"
+                        >
+                          <ExternalLink size={14} />
+                          Manage Google Account
+                        </a>
+                      </div>
                     </div>
+                  ) : (
+                    /* Local Credentials password change inputs */
+                    <div className="space-y-4">
+                      <div className="border-t border-slate-150 pt-5 dark:border-slate-850" />
 
-                    <div>
-                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">New Password</label>
-                      <input
-                        type="password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        placeholder="At least 6 characters"
-                        className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                      />
-                    </div>
+                      <div className="flex items-center gap-2">
+                        <Lock size={18} className="text-blue-500" />
+                        <h4 className="text-md font-bold text-slate-900 dark:text-white">Change Password (Optional)</h4>
+                      </div>
 
-                    <div>
-                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Confirm New Password</label>
-                      <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Verify new password"
-                        className="mt-2 block w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/25 dark:border-slate-800 dark:bg-slate-800/50 dark:text-white"
-                      />
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="md:col-span-2">
+                          <label className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            Current Password
+                          </label>
+                          <input
+                            type="password"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                            placeholder="Enter current password to make changes"
+                            className={inputClass}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            New Password
+                          </label>
+                          <input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="At least 6 characters"
+                            className={inputClass}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            Confirm New Password
+                          </label>
+                          <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Verify new password"
+                            className={inputClass}
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  )}
+                </div>
+
+                <div className="mt-8 border-t border-slate-200 pt-5 dark:border-slate-800 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="inline-flex min-h-[40px] items-center justify-center rounded-xl border border-slate-250 bg-white px-5 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 cursor-pointer active:scale-95 duration-150"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isLoading || !isFormDirty}
+                    className="inline-flex min-h-[40px] items-center justify-center rounded-xl bg-blue-600 px-6 py-2 text-xs sm:text-sm font-semibold text-white transition-all shadow-sm hover:bg-blue-700 hover:shadow-blue-500/10 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100 cursor-pointer duration-150 shrink-0 gap-2"
+                  >
+                    {isLoading ? (
+                      <>
+                        <RefreshCw className="animate-spin h-4 w-4" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Changes'
+                    )}
+                  </button>
+                </div>
+              </form>
             </div>
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="inline-flex min-h-[44px] items-center justify-center rounded-2xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white relative cursor-pointer btn-animate hover:shadow-lg hover:shadow-blue-500/20 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-800"
-              >
-                {isLoading && (
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                  </span>
-                )}
-                <span className={isLoading ? "opacity-0" : ""}>Save Changes</span>
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
+        </FadeIn>
       </div>
     </div>
   );

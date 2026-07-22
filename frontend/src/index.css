@@ -310,3 +310,63 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
   }
 }
+
+/* Unified Global Theme Transitions (Ease-in-out 250ms duration) */
+html,
+body,
+#root,
+aside,
+main,
+nav,
+header,
+div,
+span,
+button,
+input,
+select,
+textarea,
+a,
+table,
+tr,
+th,
+td,
+svg,
+h1,
+h2,
+h3,
+h4,
+p {
+  transition-property: background-color, border-color, text-decoration-color, fill, stroke, color, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 250ms;
+}
+
+/* Accessibility overrides for reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  #root,
+  aside,
+  main,
+  nav,
+  header,
+  div,
+  span,
+  button,
+  input,
+  select,
+  textarea,
+  a,
+  table,
+  tr,
+  th,
+  td,
+  svg,
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    transition: none !important;
+  }
+}

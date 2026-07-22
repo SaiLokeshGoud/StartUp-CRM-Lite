@@ -28,7 +28,7 @@ export default function Dashboard() {
       </FadeIn>
 
       <FadeIn delay={50}>
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 min-[500px]:grid-cols-2 gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-4">
           <StatsCard title="Total Leads" value={totalLeads} icon={Users} change={12} color="#2563EB" />
           <StatsCard title="Won" value={wonLeads} icon={Trophy} change={8} color="#22C55E" />
           <StatsCard title="Lost" value={lostLeads} icon={XCircle} change={3} color="#EF4444" />

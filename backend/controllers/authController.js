@@ -136,10 +136,14 @@ export async function updateProfile(req, res, next) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    const { name, oldPassword, newPassword } = req.body;
+    const { name, oldPassword, newPassword, profilePicture } = req.body;
 
     if (name) {
       user.name = name;
+    }
+
+    if (profilePicture !== undefined) {
+      user.profilePicture = profilePicture;
     }
 
     if (newPassword) {
