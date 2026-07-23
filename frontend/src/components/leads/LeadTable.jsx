@@ -99,7 +99,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
               <SortHeader field="email" label="Email" currentSort={sortBy} />
               <SortHeader field="source" label="Source" currentSort={sortBy} />
               <SortHeader field="createdAt" label="Date Added" currentSort={sortBy} onSort={onSort} />
-              <th className="px-6 py-4 text-right text-[13px] font-semibold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] w-[140px] bg-slate-50/70 dark:bg-[#111827] border-b border-slate-200/80 dark:border-[#243145]">
+              <th className="px-4 py-4 text-left text-[13px] font-semibold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] w-[152px] min-w-[152px] bg-slate-50/70 dark:bg-[#111827] border-b border-slate-200/80 dark:border-[#243145]">
                 Actions
               </th>
             </tr>
@@ -160,35 +160,64 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                     <span className="block truncate">{formatDate(lead.createdAt)}</span>
                   </td>
 
-                  {/* Actions */}
-                  <td className="px-6 py-3 bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
-                    <div className="inline-flex items-center justify-end gap-2.5">
-                      {/* View Button */}
+                  {/* Actions — always visible semantic icon buttons */}
+                  <td className="px-4 py-3 bg-white dark:bg-[#111827] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                    <div className="flex items-center justify-start gap-1.5">
+
+                      {/* View — Blue */}
                       <button
                         onClick={() => onView(lead)}
-                        title="View details"
-                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] dark:hover:bg-[#3B82F6]/10 cursor-pointer opacity-0 translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250 ease-out"
+                        aria-label="View Lead"
+                        title="View Lead"
+                        className="
+                          h-[26px] w-[26px] rounded-md flex items-center justify-center shrink-0 cursor-pointer
+                          bg-blue-50 text-blue-600
+                          dark:bg-blue-500/15 dark:text-blue-400
+                          hover:bg-blue-600 hover:text-white hover:scale-105 hover:shadow-sm hover:shadow-blue-500/25
+                          dark:hover:bg-blue-500 dark:hover:text-white
+                          active:scale-95
+                          transition-all duration-150 ease-out
+                        "
                       >
-                        <Eye size={16} />
+                        <Eye size={12} strokeWidth={2} />
                       </button>
 
-                      {/* Edit Button */}
+                      {/* Edit — Amber */}
                       <button
                         onClick={() => onEdit(lead)}
-                        title="Edit lead"
-                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:text-[#94A3B8] dark:hover:text-[#F59E0B] dark:hover:bg-[#F59E0B]/10 cursor-pointer opacity-0 translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250 ease-out delay-75"
+                        aria-label="Edit Lead"
+                        title="Edit Lead"
+                        className="
+                          h-[26px] w-[26px] rounded-md flex items-center justify-center shrink-0 cursor-pointer
+                          bg-amber-50 text-amber-600
+                          dark:bg-amber-500/15 dark:text-amber-400
+                          hover:bg-amber-500 hover:text-white hover:scale-105 hover:shadow-sm hover:shadow-amber-500/25
+                          dark:hover:bg-amber-500 dark:hover:text-white
+                          active:scale-95
+                          transition-all duration-150 ease-out
+                        "
                       >
-                        <Pencil size={16} />
+                        <Pencil size={12} strokeWidth={2} />
                       </button>
 
-                      {/* Delete Button */}
+                      {/* Delete — Red */}
                       <button
                         onClick={() => onDelete(lead)}
-                        title="Delete lead"
-                        className="h-9 w-9 rounded-full flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 dark:text-[#94A3B8] dark:hover:text-[#EF4444] dark:hover:bg-[#EF4444]/10 cursor-pointer opacity-0 translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-250 ease-out delay-150"
+                        aria-label="Delete Lead"
+                        title="Delete Lead"
+                        className="
+                          h-[26px] w-[26px] rounded-md flex items-center justify-center shrink-0 cursor-pointer
+                          bg-red-50 text-red-500
+                          dark:bg-red-500/15 dark:text-red-400
+                          hover:bg-red-600 hover:text-white hover:scale-105 hover:shadow-sm hover:shadow-red-500/25
+                          dark:hover:bg-red-500 dark:hover:text-white
+                          active:scale-95
+                          transition-all duration-150 ease-out
+                        "
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={12} strokeWidth={2} />
                       </button>
+
                     </div>
                   </td>
                 </tr>

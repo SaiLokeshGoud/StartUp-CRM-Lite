@@ -45,63 +45,66 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
   const SourceIcon = source.icon;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover-card hover-shine card-icon-hover dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg dark:hover:bg-[#1E293B]/20">
+    <div className="flex flex-col h-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover-card hover-shine card-icon-hover dark:border-[#243145] dark:bg-[#111827] dark:shadow-lg dark:hover:bg-[#1E293B]/20">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-base font-bold text-slate-800 dark:text-[#F8FAFC]">{lead.name}</h3>
-          <p className="text-xs font-semibold text-slate-500 dark:text-[#94A3B8]">{lead.company}</p>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base font-bold text-slate-800 dark:text-[#F8FAFC] truncate" title={lead.name}>{lead.name}</h3>
+          <p className="text-xs font-semibold text-slate-500 dark:text-[#94A3B8] truncate" title={lead.company}>{lead.company}</p>
         </div>
 
-        <StatusBadge status={lead.status} />
+        <div className="shrink-0">
+          <StatusBadge status={lead.status} />
+        </div>
       </div>
 
-      <div className="mt-4 space-y-2.5 border-t border-slate-100 dark:border-[#243145]/60 pt-3 text-xs text-slate-600 dark:text-[#94A3B8]">
-        <div className="flex items-center gap-2">
-          <Mail size={14} className="opacity-70" />
+      <div className="flex-1 mt-4 space-y-2.5 border-t border-slate-100 dark:border-[#243145]/60 pt-3 text-xs text-slate-600 dark:text-[#94A3B8]">
+        <div className="flex items-center gap-2 min-w-0">
+          <Mail size={14} className="opacity-70 shrink-0" />
           <a
             href={`mailto:${lead.email}`}
-            className="text-slate-600 hover:text-blue-600 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] transition-colors hover:underline truncate"
+            className="text-slate-600 hover:text-blue-600 dark:text-[#94A3B8] dark:hover:text-[#3B82F6] transition-colors hover:underline truncate block flex-1"
+            title={lead.email}
           >
             {lead.email}
           </a>
         </div>
         
         <div className="flex items-center gap-2">
-          <Calendar size={14} className="opacity-70" />
-          <span>Added {formatDate(lead.createdAt)}</span>
+          <Calendar size={14} className="opacity-70 shrink-0" />
+          <span className="truncate">Added {formatDate(lead.createdAt)}</span>
         </div>
 
         <div className="mt-2.5">
           <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-[10px] font-bold capitalize tracking-wide ${source.classes}`}>
-            <SourceIcon size={10} className="opacity-80 card-icon" />
+            <SourceIcon size={10} className="opacity-80 card-icon shrink-0" />
             {lead.source}
           </span>
         </div>
       </div>
 
-      <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-[#243145]/60 pt-3.5">
+      <div className="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 dark:border-[#243145]/60 pt-3.5 shrink-0">
         <button
           onClick={() => onView(lead)}
-          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm"
+          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2 py-2 text-xs font-bold text-slate-700 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm w-full truncate"
         >
-          <Eye size={14} />
-          Details
+          <Eye size={13} className="shrink-0" />
+          <span className="truncate">Details</span>
         </button>
 
         <button
           onClick={() => onEdit(lead)}
-          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm"
+          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2 py-2 text-xs font-bold text-slate-700 dark:border-[#243145] dark:bg-[#111827] dark:text-[#F8FAFC] cursor-pointer btn-animate shadow-sm w-full truncate"
         >
-          <Pencil size={14} />
-          Edit
+          <Pencil size={13} className="shrink-0" />
+          <span className="truncate">Edit</span>
         </button>
 
         <button
           onClick={() => onDelete(lead)}
-          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl bg-red-50 text-red-700 border border-red-100 px-3 py-2 text-xs font-bold dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20 cursor-pointer btn-animate shadow-sm"
+          className="flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl bg-red-55 text-red-700 border border-red-100 px-2 py-2 text-xs font-bold dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20 cursor-pointer btn-animate shadow-sm w-full truncate"
         >
-          <Trash2 size={14} />
-          Delete
+          <Trash2 size={13} className="shrink-0" />
+          <span className="truncate">Delete</span>
         </button>
       </div>
     </div>

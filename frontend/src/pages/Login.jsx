@@ -84,7 +84,7 @@ export default function Login() {
       </div>
 
       {/* Right panel: Sign-in Form */}
-      <div className="relative flex flex-1 flex-col justify-between p-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200 overflow-hidden">
+      <div className="relative flex flex-1 flex-col justify-between p-4 sm:p-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200 overflow-hidden">
         {/* Decorative background glass orbs */}
         <div className="absolute top-1/4 -right-24 h-96 w-96 rounded-full bg-blue-400/20 blur-3xl dark:bg-blue-600/10 animate-float-slow pointer-events-none" />
         <div className="absolute bottom-1/4 -left-24 h-96 w-96 rounded-full bg-purple-400/20 blur-3xl dark:bg-purple-600/10 animate-float-delayed pointer-events-none" />
@@ -100,11 +100,17 @@ export default function Login() {
             </p>
           </div>
           <div className="hidden md:block" />
-          <DarkModeToggle />
+          {/* Compact icon-only toggle on mobile, full toggle on desktop */}
+          <div className="md:hidden">
+            <DarkModeToggle compact />
+          </div>
+          <div className="hidden md:block">
+            <DarkModeToggle />
+          </div>
         </div>
 
         {/* Centered Login Card */}
-        <div className="group relative mx-auto my-auto w-full max-w-md z-10">
+        <div className="group relative mx-auto my-auto w-full max-w-md z-10 px-0">
           {/* Card glow effect for dark theme */}
           <div className="absolute -inset-1.5 rounded-[32px] bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-0 blur-xl transition-all duration-500 group-hover:duration-200 dark:opacity-15 dark:group-hover:opacity-30" />
           
@@ -177,7 +183,11 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '400ms', opacity: 0 }}>
+            {/* Google button wrapper: clips iframe overflow, forces width to card width */}
+            <div
+              className="animate-fade-in-up overflow-hidden rounded-full"
+              style={{ animationDelay: '400ms', opacity: 0 }}
+            >
               <GoogleLogin
                 key={isDarkMode ? 'dark' : 'light'}
                 onSuccess={async (credentialResponse) => {
@@ -194,7 +204,7 @@ export default function Login() {
                 useOneTap
                 theme={isDarkMode ? 'filled_black' : 'outline'}
                 shape="pill"
-                width="382px"
+                width="100%"
               />
             </div>
 

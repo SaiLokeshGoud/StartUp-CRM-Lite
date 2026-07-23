@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { Search, X, Plus, ChevronLeft, ChevronRight, Eye, Pencil, Trash2, Calendar } from "lucide-react";
@@ -97,9 +98,16 @@ export default function Leads() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  // View states
-  const [viewMode, setViewMode] = useState("table");
-  const [isDesktop, setIsDesktop] = useState(false);
+  // Lock body scroll whenever any modal is open; restore on close/unmount
+  useEffect(() => {
+    const anyOpen = isModalOpen || !!leadToView || !!leadToDelete;
+    if (anyOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [isModalOpen, leadToView, leadToDelete]);
+
 
   // Debounce search input
   useEffect(() => {
@@ -123,19 +131,6 @@ export default function Leads() {
       navigate("/leads", { replace: true });
     }
   }, [location.search, navigate]);
-
-  // Responsive layout listener
-  useEffect(() => {
-    const handleResize = () => {
-      const desktop = window.innerWidth >= 1024;
-      setIsDesktop(desktop);
-      setViewMode((current) => (desktop ? "table" : current === "table" ? "cards" : current));
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   // Compute unique companies list from leads dynamically
   const uniqueCompanies = ["All", ...new Set(leads.map((l) => l.company).filter(Boolean))].sort();
@@ -394,40 +389,15 @@ export default function Leads() {
         )}
       </div>
 
-      {/* Mobile Toggle View Modes */}
-      {!isDesktop && (
-        <div className="flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setViewMode("cards")}
-            className={`min-h-[40px] px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
-              viewMode === "cards"
-                ? "bg-blue-600 text-white"
-                : "bg-white border border-slate-200 text-slate-700 dark:bg-[#111827] dark:border-[#243145] dark:text-[#F8FAFC] hover:bg-slate-50 dark:hover:bg-[#1B2235]/60"
-            }`}
-          >
-            Cards
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode("table")}
-            className={`min-h-[40px] px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${
-              viewMode === "table"
-                ? "bg-blue-600 text-white"
-                : "bg-white border border-slate-200 text-slate-700 dark:bg-[#111827] dark:border-[#243145] dark:text-[#F8FAFC] hover:bg-slate-50 dark:hover:bg-[#1B2235]/60"
-            }`}
-          >
-            Table
-          </button>
-        </div>
-      )}
-
       {/* Cards View (Mobile/Tablet) */}
       <div className="lg:hidden">
         {totalRecords === 0 ? (
           <EmptyState hasLeads={leads.length > 0} />
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div 
+            className="grid gap-4"
+            style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))' }}
+          >
             {paginatedLeads.map((lead) => (
               <LeadCard key={lead.id || lead._id} lead={lead} onEdit={handleEditClick} onDelete={handleDeleteClick} onView={setLeadToView} />
             ))}
@@ -546,27 +516,56 @@ export default function Leads() {
         </div>
       )}
 
-      {/* Edit/Add Lead Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-0 sm:items-center sm:p-4 backdrop-blur-sm">
-          <div className="h-full w-full overflow-y-auto bg-white p-6 shadow-2xl sm:h-auto sm:max-w-lg sm:rounded-3xl border border-slate-200 dark:bg-[#111827] dark:border-[#243145]">
-            <h2 className="mb-4 text-xl font-bold tracking-tight text-slate-800 dark:text-[#F8FAFC]">
-              {selectedLead ? "Edit Lead" : "Create New Lead"}
-            </h2>
+      {/* Edit/Add Lead Modal — rendered into document.body via Portal
+          so position:fixed is relative to the true viewport, not any
+          transformed/overflowed ancestor (Layout main, animate-page-enter, etc.) */}
+      {isModalOpen && createPortal(
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
+        >
+          <div 
+            className="flex flex-col w-full max-w-lg rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-[#243145] dark:bg-[#111827] dark:shadow-2xl overflow-hidden"
+            style={{ maxHeight: 'calc(100dvh - 32px)' }}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-100 dark:border-[#243145]/40 shrink-0 bg-white dark:bg-[#111827]">
+              <h2 className="text-xl font-bold tracking-tight text-slate-800 dark:text-[#F8FAFC]">
+                {selectedLead ? "Edit Lead" : "Create New Lead"}
+              </h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-slate-400 hover:text-slate-650 dark:text-[#94A3B8] dark:hover:text-[#F8FAFC] cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center text-sm font-semibold rounded-full hover:bg-slate-100 dark:hover:bg-[#243145]/60 transition"
+              >
+                ✕
+              </button>
+            </div>
 
-            <LeadForm
-              initialData={selectedLead}
-              onSubmit={selectedLead ? handleUpdateLead : handleCreateLead}
-              onCancel={() => setIsModalOpen(false)}
-            />
+            {/* Form Container (includes scrollable fields and sticky footer) */}
+            <div className="flex-1 min-h-0 p-6 bg-white dark:bg-[#111827]">
+              <LeadForm
+                initialData={selectedLead}
+                onSubmit={selectedLead ? handleUpdateLead : handleCreateLead}
+                onCancel={() => setIsModalOpen(false)}
+              />
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {/* View Lead Details Modal */}
-      {leadToView && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-[#243145] dark:bg-[#111827] dark:shadow-2xl transition-colors duration-200">
+      {/* View Lead Details Modal — rendered into document.body via Portal
+          so position:fixed is relative to the true viewport, not any
+          transformed/overflowed ancestor (Layout main, animate-page-enter, etc.) */}
+      {leadToView && createPortal(
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setLeadToView(null); }}
+        >
+          <div
+            className="w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-[#243145] dark:bg-[#111827] dark:shadow-2xl transition-colors duration-200 overflow-y-auto overscroll-contain"
+            style={{ maxHeight: 'calc(100dvh - 32px)' }}
+          >
             <div className="flex items-start justify-between">
               <h3 className="text-xl font-bold tracking-tight text-slate-800 dark:text-[#F8FAFC]">Lead Details</h3>
               <button
@@ -651,12 +650,13 @@ export default function Leads() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {/* Delete Confirmation Modal */}
-      {leadToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      {/* Delete Confirmation Modal — also portal-rendered for consistent z-index */}
+      {leadToDelete && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-[#243145] dark:bg-[#111827] dark:shadow-2xl transition-colors duration-200">
             <h3 className="text-lg font-bold text-slate-800 dark:text-[#F8FAFC]">Delete Lead</h3>
             <p className="mt-2 text-sm text-slate-500 dark:text-gray-400">
@@ -677,7 +677,8 @@ export default function Leads() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -46,85 +46,88 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Name</label>
-        <input
-          name="name"
-          placeholder="Enter lead name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
-        />
-        {errors.name && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.name}</p>}
-      </div>
-
-      <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Company</label>
-        <input
-          name="company"
-          placeholder="Enter company name"
-          value={formData.company}
-          onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
-        />
-        {errors.company && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.company}</p>}
-      </div>
-
-      <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Email</label>
-        <input
-          name="email"
-          placeholder="Enter email address"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
-        />
-        {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.email}</p>}
-      </div>
-
-      <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Phone (Optional)</label>
-        <input
-          name="phone"
-          placeholder="Enter phone number"
-          value={formData.phone}
-          onChange={handleChange}
-          className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+      {/* Scrollable Form Fields */}
+      <div className="flex-1 overflow-y-auto space-y-4 pr-1 overscroll-contain scrollbar-thin">
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Status</label>
-          <select
-            name="status"
-            value={formData.status}
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Name</label>
+          <input
+            name="name"
+            placeholder="Enter lead name"
+            value={formData.name}
             onChange={handleChange}
-            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10 cursor-pointer"
-          >
-            {statusOptions.map((status) => (
-              <option key={status} value={status} className="bg-white text-slate-800 dark:bg-[#1B2235] dark:text-[#F8FAFC]">{status}</option>
-            ))}
-          </select>
+            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
+          />
+          {errors.name && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.name}</p>}
         </div>
 
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Source</label>
-          <select
-            name="source"
-            value={formData.source}
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Company</label>
+          <input
+            name="company"
+            placeholder="Enter company name"
+            value={formData.company}
             onChange={handleChange}
-            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10 cursor-pointer"
-          >
-            {sourceOptions.map((source) => (
-              <option key={source} value={source} className="bg-white text-slate-800 dark:bg-[#1B2235] dark:text-[#F8FAFC]">{source}</option>
-            ))}
-          </select>
+            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
+          />
+          {errors.company && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.company}</p>}
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Email</label>
+          <input
+            name="email"
+            placeholder="Enter email address"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
+          />
+          {errors.email && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.email}</p>}
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Phone (Optional)</label>
+          <input
+            name="phone"
+            placeholder="Enter phone number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Status</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10 cursor-pointer"
+            >
+              {statusOptions.map((status) => (
+                <option key={status} value={status} className="bg-white text-slate-800 dark:bg-[#1B2235] dark:text-[#F8FAFC]">{status}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Source</label>
+            <select
+              name="source"
+              value={formData.source}
+              onChange={handleChange}
+              className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10 cursor-pointer"
+            >
+              {sourceOptions.map((source) => (
+                <option key={source} value={source} className="bg-white text-slate-800 dark:bg-[#1B2235] dark:text-[#F8FAFC]">{source}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end border-t border-slate-100 dark:border-[#243145]/40 mt-4">
+      <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end border-t border-slate-100 dark:border-[#243145]/40 mt-4 bg-white dark:bg-[#111827] shrink-0">
         <button
           type="button"
           onClick={onCancel}

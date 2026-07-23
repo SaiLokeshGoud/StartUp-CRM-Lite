@@ -93,8 +93,6 @@ export function AuthProvider({ children }) {
   };
 
   const handleUpdateProfile = async (profileData) => {
-    setIsLoading(true);
-
     try {
       const data = await authService.updateProfile(profileData);
       setUser(data.user);
@@ -104,8 +102,6 @@ export function AuthProvider({ children }) {
       const message = error.response?.data?.message || 'Failed to update profile';
       toast.error(message);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 

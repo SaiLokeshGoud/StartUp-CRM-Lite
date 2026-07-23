@@ -370,3 +370,74 @@ p {
     transition: none !important;
   }
 }
+
+/* ── Google OAuth iframe: force it to respect its container on mobile ──────
+   The @react-oauth/google component injects a fixed-size iframe. We override
+   its width so it never overflows the login card on small screens.           */
+div[class*="animate-fade-in-up"] > div[id^="credential_picker_container"],
+div[class*="animate-fade-in-up"] iframe,
+.overflow-hidden iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+
+/* ================================================================
+   SPLASH LOADER ANIMATIONS
+   ================================================================ */
+
+/* 1. ECG heartbeat: strokes the SVG polyline from left to right.
+      The polyline total length ≈ 46 SVG units.
+      dashoffset goes 46 → 0 (draw), then stays at 0 briefly, then resets. */
+@keyframes splashHeartbeat {
+  0%   { stroke-dashoffset: 46; opacity: 1; }
+  60%  { stroke-dashoffset: 0;  opacity: 1; }
+  80%  { stroke-dashoffset: 0;  opacity: 0.9; }
+  100% { stroke-dashoffset: 46; opacity: 1; }
+}
+
+/* 2. Glow ring: pulses at the heartbeat peak (matches the ~60% point above) */
+@keyframes splashGlowPulse {
+  0%   { opacity: 0.2; transform: scale(1);    }
+  55%  { opacity: 0.6; transform: scale(1.08); }
+  75%  { opacity: 0.3; transform: scale(1.02); }
+  100% { opacity: 0.2; transform: scale(1);    }
+}
+
+/* 3. Brand text and progress bar entrance */
+@keyframes splashFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* 4. Thin progress bar slide */
+@keyframes splashProgressBar {
+  0%   { left: -35%; }
+  100% { left: 110%; }
+}
+
+/* 5. Reduced-motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo-container svg polyline[style] {
+    animation: none !important;
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+  }
+  .splash-logo-glow {
+    animation: none !important;
+    opacity: 0.2 !important;
+  }
+  .splash-brand-text,
+  .splash-progress-bar {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Dark mode logo background */
+.dark .splash-logo-container {
+  background-color: rgba(23, 37, 84, 0.5) !important; /* blue-950/50 */
+}
