@@ -529,11 +529,12 @@ export default function Leads() {
       {isModalOpen && createPortal(
         <div 
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          style={{ height: '100dvh' }}
           onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
         >
           <div 
             className="flex flex-col w-full max-w-lg rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-[#243145] dark:bg-[#111827] dark:shadow-2xl overflow-hidden"
-            style={{ maxHeight: 'calc(100dvh - 32px)' }}
+            style={{ maxHeight: 'calc(100dvh - 24px)' }}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-100 dark:border-[#243145]/40 shrink-0 bg-white dark:bg-[#111827]">
@@ -549,7 +550,7 @@ export default function Leads() {
             </div>
 
             {/* Form Container (includes scrollable fields and sticky footer) */}
-            <div className="flex-1 min-h-0 p-6 bg-white dark:bg-[#111827]">
+            <div className="flex-1 min-h-0 flex flex-col p-6 bg-white dark:bg-[#111827]">
               <LeadForm
                 initialData={selectedLead}
                 onSubmit={selectedLead ? handleUpdateLead : handleCreateLead}

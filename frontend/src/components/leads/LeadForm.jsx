@@ -70,7 +70,17 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
       {/* Scrollable Form Fields */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-1 overscroll-contain scrollbar-thin">
+      <div
+        className="space-y-4 pr-1 scrollbar-thin"
+        style={{
+          flex: '1 1 auto',
+          minHeight: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          overscrollBehavior: 'contain',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Name</label>
           <input
