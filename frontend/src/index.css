@@ -440,4 +440,33 @@ div[class*="animate-fade-in-up"] iframe,
 /* Dark mode logo background */
 .dark .splash-logo-container {
   background-color: rgba(23, 37, 84, 0.5) !important; /* blue-950/50 */
+}
+
+/* Custom fade-in-up animation specifically for Google button to bypass global iframe stretching */
+@utility animate-google-fade-in {
+  animation: fadeInUp 0.5s ease-out forwards;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Center Google Login Button and override global iframe rules */
+div.google-signin-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+div.google-signin-container > div {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+div.google-signin-container iframe {
+  max-width: 100% !important;
+  width: auto !important;
+  margin: 0 auto !important;
 }

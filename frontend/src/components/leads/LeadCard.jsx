@@ -1,4 +1,4 @@
-import { Pencil, Trash2, Eye, Mail, Globe, Users, PhoneCall, MailOpen, HelpCircle, Calendar } from "lucide-react";
+import { Pencil, Trash2, Eye, Mail, Globe, Users, PhoneCall, MailOpen, HelpCircle, Calendar, IndianRupee } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 
 const LinkedinIcon = ({ size = 24, ...props }) => (
@@ -40,6 +40,13 @@ function formatDate(dateString) {
   });
 }
 
+function formatDealValue(value) {
+  if (value === null || value === undefined || value === "") return "—";
+  const numericValue = Number(value);
+  if (isNaN(numericValue)) return "—";
+  return `₹${numericValue.toLocaleString("en-IN")}`;
+}
+
 export default function LeadCard({ lead, onEdit, onDelete, onView }) {
   const source = sourceConfig[lead.source] || sourceConfig.Other;
   const SourceIcon = source.icon;
@@ -72,6 +79,14 @@ export default function LeadCard({ lead, onEdit, onDelete, onView }) {
         <div className="flex items-center gap-2">
           <Calendar size={14} className="opacity-70 shrink-0" />
           <span className="truncate">Added {formatDate(lead.createdAt)}</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <IndianRupee size={14} className="opacity-70 shrink-0" />
+          <span className="truncate">
+            <span className="text-slate-500 dark:text-[#94A3B8]">Value: </span>
+            <span className="font-bold text-slate-700 dark:text-[#F8FAFC]">{formatDealValue(lead.value)}</span>
+          </span>
         </div>
 
         <div className="mt-2.5">

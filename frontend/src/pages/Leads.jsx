@@ -11,6 +11,13 @@ import EmptyState from "../components/common/EmptyState";
 import StatusBadge from "../components/leads/StatusBadge";
 import { useLeads } from "../context/LeadContext";
 
+function formatDealValue(value) {
+  if (value === null || value === undefined || value === "") return "—";
+  const numericValue = Number(value);
+  if (isNaN(numericValue)) return "—";
+  return `₹${numericValue.toLocaleString("en-IN")}`;
+}
+
 // Custom Dropdown Select supporting both Light and Dark Themes
 function CustomSelect({ value, onChange, options, placeholder }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -611,7 +618,7 @@ export default function Leads() {
                 <div>
                   <span className="text-[10px] font-bold text-slate-500 dark:text-[#94A3B8] uppercase tracking-wider">Deal Value</span>
                   <p className="text-sm font-bold text-emerald-600 dark:text-[#10B981] mt-0.5">
-                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(leadToView.value || 0)}
+                    {formatDealValue(leadToView.value)}
                   </p>
                 </div>
                 <div>

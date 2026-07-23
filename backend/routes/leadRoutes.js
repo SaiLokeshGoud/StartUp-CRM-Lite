@@ -44,6 +44,9 @@ const leadCreateValidation = [
   body('phone')
     .optional()
     .trim(),
+  body('value')
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: 0 }).withMessage('Deal Value must be a non-negative number'),
 ];
 
 const leadUpdateValidation = [
@@ -72,6 +75,9 @@ const leadUpdateValidation = [
   body('phone')
     .optional()
     .trim(),
+  body('value')
+    .optional({ nullable: true, checkFalsy: true })
+    .isFloat({ min: 0 }).withMessage('Deal Value must be a non-negative number'),
 ];
 
 const leadStatusValidation = [

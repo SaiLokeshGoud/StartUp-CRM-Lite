@@ -40,6 +40,13 @@ function formatDate(dateString) {
   });
 }
 
+function formatDealValue(value) {
+  if (value === null || value === undefined || value === "") return "—";
+  const numericValue = Number(value);
+  if (isNaN(numericValue)) return "—";
+  return `₹${numericValue.toLocaleString("en-IN")}`;
+}
+
 function SortHeader({ field, label, currentSort, onSort }) {
   const isSortable = !!onSort;
   const isActive = currentSort.field === field;
@@ -98,6 +105,7 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
               <SortHeader field="status" label="Status" currentSort={sortBy} onSort={onSort} />
               <SortHeader field="email" label="Email" currentSort={sortBy} />
               <SortHeader field="source" label="Source" currentSort={sortBy} />
+              <SortHeader field="value" label="Deal Value" currentSort={sortBy} onSort={onSort} />
               <SortHeader field="createdAt" label="Date Added" currentSort={sortBy} onSort={onSort} />
               <th className="px-4 py-4 text-left text-[13px] font-semibold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] w-[152px] min-w-[152px] bg-slate-50/70 dark:bg-[#111827] border-b border-slate-200/80 dark:border-[#243145]">
                 Actions
@@ -153,6 +161,11 @@ export default function LeadTable({ leads, onEdit, onDelete, onView, sortBy = { 
                       <SourceIcon size={12} className="opacity-80 shrink-0" />
                       {lead.source}
                     </span>
+                  </td>
+
+                  {/* Deal Value */}
+                  <td className="px-6 py-3 bg-white dark:bg-[#111827] text-[15px] font-semibold text-slate-700 dark:text-[#E2E8F0] border-b border-slate-100 dark:border-b dark:border-[#243145]/60">
+                    <span className="block truncate">{formatDealValue(lead.value)}</span>
                   </td>
 
                   {/* Date Added */}

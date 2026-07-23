@@ -110,6 +110,7 @@ export async function createLead(req, res, next) {
       status,
       source,
       notes,
+      value,
     } = req.body;
 
     const lead = await Lead.create({
@@ -120,6 +121,7 @@ export async function createLead(req, res, next) {
       status,
       source,
       notes,
+      value,
       owner: req.user._id,
     });
 

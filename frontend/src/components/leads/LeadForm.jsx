@@ -4,16 +4,23 @@ const statusOptions = ["New", "Contacted", "Meeting Scheduled", "Proposal Sent",
 const sourceOptions = ["Website", "Referral", "LinkedIn", "Cold Call", "Email Campaign", "Other"];
 
 export default function LeadForm({ initialData, onSubmit, onCancel }) {
-  const [formData, setFormData] = useState(
-    initialData || {
+  const [formData, setFormData] = useState(() => {
+    if (initialData) {
+      return {
+        ...initialData,
+        value: initialData.value === undefined || initialData.value === null ? "" : initialData.value,
+      };
+    }
+    return {
       name: "",
       company: "",
       email: "",
       phone: "",
       status: "New",
       source: "Website",
-    }
-  );
+      value: "",
+    };
+  });
 
   const [errors, setErrors] = useState({});
 
@@ -38,11 +45,26 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
       newErrors.email = "Please enter a valid email";
     }
 
+    const valueNum = formData.value === "" || formData.value === undefined || formData.value === null
+      ? null
+      : Number(formData.value);
+
+    if (valueNum !== null) {
+      if (isNaN(valueNum)) {
+        newErrors.value = "Deal value must be a valid number";
+      } else if (valueNum < 0) {
+        newErrors.value = "Deal value cannot be negative";
+      }
+    }
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) return;
 
-    onSubmit(formData);
+    onSubmit({
+      ...formData,
+      value: valueNum,
+    });
   };
 
   return (
@@ -94,6 +116,24 @@ export default function LeadForm({ initialData, onSubmit, onCancel }) {
             onChange={handleChange}
             className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
           />
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#94A3B8] mb-1.5 transition-colors duration-200">Deal Value</label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#94A3B8] text-sm font-semibold select-none">₹</span>
+            <input
+              name="value"
+              type="number"
+              min="0"
+              step="any"
+              placeholder="Enter deal value"
+              value={formData.value === null || formData.value === undefined ? "" : formData.value}
+              onChange={handleChange}
+              className="w-full min-h-[44px] rounded-xl border border-slate-200 bg-white pl-8 pr-4 py-3 text-sm text-slate-800 dark:border-[#243145] dark:bg-[#0F172A] dark:text-[#F8FAFC] placeholder-[#94A3B8] outline-none transition-all duration-200 focus:border-blue-500 dark:focus:border-[#3B82F6] focus:ring-4 focus:ring-blue-100 dark:focus:ring-[#3B82F6]/10"
+            />
+          </div>
+          {errors.value && <p className="mt-1 text-xs text-red-500 dark:text-red-400 font-semibold animate-error-in">{errors.value}</p>}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

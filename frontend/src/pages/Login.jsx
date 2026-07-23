@@ -189,9 +189,9 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Google button wrapper: clips iframe overflow, forces width to card width */}
+            {/* Google button wrapper: centers Google Login and handles its custom animation */}
             <div
-              className="animate-fade-in-up overflow-hidden rounded-full"
+              className="animate-google-fade-in flex justify-center items-center w-full google-signin-container"
               style={{ animationDelay: '400ms', opacity: 0 }}
             >
               <GoogleLogin
